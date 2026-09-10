@@ -1,23 +1,25 @@
 # Hoopsnake Designs — repository-root deploy mapping for Hostinger Git
 #
 # Hostinger Advanced → Git deploys the selected branch into the hosting
-# destination (default: public_html). This file maps public URLs to the
-# committed publish tree in site/ and blocks repository source/admin paths.
+# destination (default: public_html). Only explicit public URL prefixes are
+# allowed; everything else is denied before any repository file is served.
 
 Options -Indexes
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
-  # Block repository source, dev, and runtime-secret paths from HTTP access
-  RewriteRule ^(?:src|node_modules|scripts|docs|vendor|\.github|tests)(?:/|$) - [F,L]
-  RewriteRule ^(?:composer\.(?:json|lock)|package(?:-lock)?\.json|phpunit\.xml|DEPLOYMENT\.md|README\.md|\.env|\.gitignore)$ - [F,L]
-  RewriteRule ^api/(?:src|deploy|tests|config\.example\.php)(?:/|$) - [F,L]
-  RewriteRule ^site/api/(?:src|vendor|config\.php|composer\.(?:json|lock))(?:/|$) - [F,L]
+  # Default-deny public boundary: allow only intended site URLs
+  RewriteCond %{REQUEST_URI} !^/$
+  RewriteCond %{REQUEST_URI} !^/_astro/
+  RewriteCond %{REQUEST_URI} !^/images/
+  RewriteCond %{REQUEST_URI} !^/favicon\.svg$
+  RewriteCond %{REQUEST_URI} !^/robots\.txt$
+  RewriteCond %{REQUEST_URI} !^/sitemap\.xml$
+  RewriteCond %{REQUEST_URI} !^/api/project-review\.php$
+  RewriteRule ^ - [F,L]
 
-  # Serve the committed publish tree at the public URL root
+  # Internal publish mapping into committed site/ tree
   RewriteRule ^$ site/index.html [L]
-  RewriteCond %{DOCUMENT_ROOT}/site/$1 -f [OR]
-  RewriteCond %{DOCUMENT_ROOT}/site/$1 -d
   RewriteRule ^(.+)$ site/$1 [L]
 </IfModule>

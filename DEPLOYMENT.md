@@ -58,7 +58,7 @@ Important:
 
 - Hostinger's Git **Root directory** is the hosting-account destination where repository files are copied. It is **not** a repository source subdirectory selector.
 - The repository branch contents deploy into `public_html/` as-is.
-- The committed root `.htaccess` serves the publish tree from `site/` at the public URL root and blocks source/dev/config paths from HTTP access.
+- The committed root `.htaccess` uses a **default-deny public boundary**: only `/`, `/_astro/*`, `/images/*`, `/favicon.svg`, `/robots.txt`, `/sitemap.xml`, and `/api/project-review.php` are allowed. Direct requests to `/site/*`, `/public/*`, source/dev/config files, and all other repository paths return forbidden.
 - Do **not** use Hostinger Node/Web App build-command settings for this site.
 
 After merge to `main`, Hostinger pulls the branch into `public_html/`. Apache applies `.htaccess`, serves the funnel from `site/`, and executes PHP at `site/api/project-review.php`.

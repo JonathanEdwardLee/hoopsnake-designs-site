@@ -4,43 +4,64 @@ Hoopsnake Designs uses a static-first one-page site with a small PHP form endpoi
 
 ## Publishable artifact on `main`
 
-This repository keeps a **directly deployable** publish tree at `site/`. It is generated locally/CI by `npm run build` and committed to `main` so Hostinger does not need to run Node/Astro.
+This repository keeps a committed publish tree at `site/`, plus a repository-root `.htaccess` that maps public URLs to that tree after Hostinger deploys the branch.
 
 ```text
-site/
-  index.html
-  _astro/
-  images/
-  api/
-    project-review.php
-    config.example.php
-    composer.json
-    src/                     # HSD runtime PHP classes
-    vendor/                  # production Composer deps + autoload
-  robots.txt
-  sitemap.xml
-  favicon.svg
+public_html/                     # Hostinger hosting destination (default)
+  .htaccess                      # maps / -> site/, blocks source/admin paths
+  site/
+    index.html
+    _astro/
+    images/
+    api/
+      project-review.php
+      config.example.php
+      src/
+      vendor/
+    robots.txt
+    sitemap.xml
+    favicon.svg
+  src/                           # blocked from HTTP by .htaccess
+  api/                           # source only; blocked from HTTP
+  package.json                   # blocked from HTTP
+  ...
 ```
+
+Public URLs after deploy:
+
+| Public URL | Filesystem target |
+|---|---|
+| `/` | `site/index.html` |
+| `/_astro/*` | `site/_astro/*` |
+| `/images/*` | `site/images/*` |
+| `/api/project-review.php` | `site/api/project-review.php` |
 
 The PHP entrypoint resolves runtime files only relative to `site/api/`:
 
 - autoload: `site/api/vendor/autoload.php`
-- classes: `site/api/src/` via deploy-local Composer autoload
+- classes: `site/api/src/`
 - config: `site/api/config.php` (runtime only) or `site/api/config.example.php`
 
-## Hostinger Advanced → Git expectation
+## Hostinger Advanced → Git (accurate field mapping)
 
 Jonathan's selected low-touch pattern is **GitHub branch auto-deploy without a Hostinger build step**.
 
-Recommended Hostinger configuration:
+Configure in hPanel → **Advanced → Git**:
 
-1. hPanel → **Advanced → Git**
-2. Connect repository `JonathanEdwardLee/hoopsnake-designs-site`
-3. Branch: `main`
-4. Deploy/install directory: **`site`** (repository subdirectory becomes the website document root)
-5. Do **not** rely on Node build-command/output-directory settings for this site
+| Field | Value |
+|---|---|
+| Repository | `JonathanEdwardLee/hoopsnake-designs-site` |
+| Branch | `main` |
+| Root directory (hosting destination) | `public_html` (Hostinger default) |
 
-After merge to `main`, Hostinger pulls the committed `site/` tree and serves it as the public site. PHP executes `site/api/project-review.php` on Hostinger's PHP runtime.
+Important:
+
+- Hostinger's Git **Root directory** is the hosting-account destination where repository files are copied. It is **not** a repository source subdirectory selector.
+- The repository branch contents deploy into `public_html/` as-is.
+- The committed root `.htaccess` serves the publish tree from `site/` at the public URL root and blocks source/dev/config paths from HTTP access.
+- Do **not** use Hostinger Node/Web App build-command settings for this site.
+
+After merge to `main`, Hostinger pulls the branch into `public_html/`. Apache applies `.htaccess`, serves the funnel from `site/`, and executes PHP at `site/api/project-review.php`.
 
 Runtime steps on Hostinger (not performed in this repo):
 
@@ -64,12 +85,13 @@ composer install
 npm run build
 ```
 
-CI order:
+CI verifies:
 
 1. lint / typecheck / JS tests
-2. `npm run build` (Astro static output + self-contained `site/api/` packaging)
-3. PHP tests, including autoload boot tests against `site/api/vendor/autoload.php`
-4. audit + secret-value hygiene check
+2. `npm run build`
+3. PHP tests + packaged autoload verification
+4. repository-root deploy mapping simulation (`scripts/verify-deploy-mapping.sh`)
+5. audit + secret-value hygiene check
 
 ## V1 protection boundary
 

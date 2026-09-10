@@ -1,0 +1,23 @@
+# Hoopsnake Designs — repository-root deploy mapping for Hostinger Git
+#
+# Hostinger Advanced → Git deploys the selected branch into the hosting
+# destination (default: public_html). This file maps public URLs to the
+# committed publish tree in site/ and blocks repository source/admin paths.
+
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Block repository source, dev, and runtime-secret paths from HTTP access
+  RewriteRule ^(?:src|node_modules|scripts|docs|vendor|\.github|tests)(?:/|$) - [F,L]
+  RewriteRule ^(?:composer\.(?:json|lock)|package(?:-lock)?\.json|phpunit\.xml|DEPLOYMENT\.md|README\.md|\.env|\.gitignore)$ - [F,L]
+  RewriteRule ^api/(?:src|deploy|tests|config\.example\.php)(?:/|$) - [F,L]
+  RewriteRule ^site/api/(?:src|vendor|config\.php|composer\.(?:json|lock))(?:/|$) - [F,L]
+
+  # Serve the committed publish tree at the public URL root
+  RewriteRule ^$ site/index.html [L]
+  RewriteCond %{DOCUMENT_ROOT}/site/$1 -f [OR]
+  RewriteCond %{DOCUMENT_ROOT}/site/$1 -d
+  RewriteRule ^(.+)$ site/$1 [L]
+</IfModule>

@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: php-actions/composer@v6
+        with:
+          php_version: '8.3'
+          command: install
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run check
+      - run: npm test
+      - run: npm run test:php
+      - run: npm run build
+      - name: Verify no secrets in tracked files
+        run: |
+          ! git grep -E '(smtp_pass|turnstile_secret|BEGIN (RSA )?PRIVATE KEY)' -- ':!*.example.*' ':!.github/workflows/ci.yml'

@@ -1,0 +1,4 @@
+# Allow PHP execution for the project review endpoint only.
+<Files "project-review.php">
+  Require all granted
+</Files>

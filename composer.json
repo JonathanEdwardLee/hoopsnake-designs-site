@@ -1,0 +1,23 @@
+{
+  "name": "hoopsnake/designs-site",
+  "description": "Hoopsnake Designs project review API",
+  "require": {
+    "phpmailer/phpmailer": "^6.9"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^11.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Hsd\\Api\\": "api/src/"
+    },
+    "classmap": [
+      "api/src/"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Hsd\\Api\\Tests\\": "api/tests/"
+    }
+  }
+}

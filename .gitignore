@@ -1,0 +1,14 @@
+node_modules/
+.astro/
+.phpunit.cache/
+/vendor/
+.build-vendor/
+!site/api/vendor/
+!site/api/vendor/**
+.env
+.env.*
+!.env.example
+api/config.php
+site/api/config.php
+*.log
+.DS_Store

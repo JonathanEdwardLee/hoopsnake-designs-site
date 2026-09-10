@@ -1,0 +1,74 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+  turnstileSiteKey?: string;
+}
+
+const {
+  title = 'Hoopsnake Designs — Premium custom websites and qualified-lead systems',
+  description = 'Hoopsnake Launch System: premium custom website and qualified-lead system for small businesses, creators, and service operators. Projects start at $3,500.',
+  turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '1x00000000000000000000AA',
+} = Astro.props;
+
+const canonical = 'https://hoopsnakedesigns.com/';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <div class="site-shell">
+      <header class="site-header">
+        <div class="brand-lockup">
+          <strong>Hoopsnake Designs</strong>
+          <span>Premium launch systems</span>
+        </div>
+        <nav class="site-nav" aria-label="Primary">
+          <a href="#selected-work">Selected Work</a>
+          <a href="#launch-system">Launch System</a>
+          <a href="#project-fit">Project Fit</a>
+          <a href="#project-review">Project Review</a>
+        </nav>
+      </header>
+      <main id="main">
+        <slot />
+      </main>
+      <footer class="site-footer">
+        <div class="footer-grid">
+          <strong>Hoopsnake Designs</strong>
+          <p class="footer-note">
+            Premium custom websites and qualified-lead systems by Jonathan Edward Lee. Project inquiries are reviewed asynchronously through the form above — no public mailbox is published here.
+          </p>
+          <div class="footer-links">
+            <a href="#project-review">Request a project review</a>
+            <a href="#boundaries">Scope & privacy</a>
+          </div>
+          <p class="footer-note">© {new Date().getFullYear()} Hoopsnake Designs. Springfield, Missouri.</p>
+        </div>
+      </footer>
+    </div>
+    <script is:inline define:vars={{ turnstileSiteKey }}>
+      window.__HSD_TURNSTILE_SITE_KEY__ = turnstileSiteKey;
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  @import '../styles/global.css';
+</style>

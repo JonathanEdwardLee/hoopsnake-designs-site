@@ -24,6 +24,7 @@ jobs:
       - run: npm test
       - run: npm run build
       - run: npm run test:php
+      - run: bash scripts/verify-site-autoload.sh
       - run: npm audit --audit-level=high
       - name: Verify no secret values in tracked files
         run: bash scripts/check-no-secrets.sh

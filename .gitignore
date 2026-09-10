@@ -1,5 +1,4 @@
 node_modules/
-dist/
 .astro/
 .phpunit.cache/
 vendor/
@@ -8,5 +7,6 @@ vendor/
 .env.*
 !.env.example
 api/config.php
+site/api/config.php
 *.log
 .DS_Store

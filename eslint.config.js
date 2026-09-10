@@ -5,6 +5,6 @@ export default tseslint.config(
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    ignores: ['dist/**', 'node_modules/**', 'vendor/**', '.astro/**', 'scripts/**'],
+    ignores: ['node_modules/**', 'vendor/**', '.astro/**', 'scripts/**', 'site/_astro/**', 'site/index.html'],
   },
 );

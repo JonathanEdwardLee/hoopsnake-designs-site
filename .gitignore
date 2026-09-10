@@ -3,6 +3,7 @@ dist/
 .astro/
 .phpunit.cache/
 vendor/
+.build-vendor/
 .env
 .env.*
 !.env.example

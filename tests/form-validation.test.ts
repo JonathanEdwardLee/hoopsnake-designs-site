@@ -44,5 +44,25 @@ describe('honeypot', () => {
   it('blocks honeypot submissions in client validation', () => {
     const result = validateClientForm({ ...validPayload, website: 'bot' });
     expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.fieldErrors.website).toBeDefined();
+    }
+  });
+
+  it('rejects malformed optional URLs before submit', () => {
+    const result = validateClientForm({ ...validPayload, current_url: 'not-a-url' });
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.fieldErrors.current_url).toContain('valid http(s) URL');
+    }
+  });
+
+  it('returns per-field errors for missing required values', () => {
+    const result = validateClientForm({ ...validPayload, email: '' });
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.fieldErrors.email).toBeDefined();
+      expect(result.errors.length).toBeGreaterThan(0);
+    }
   });
 });

@@ -10,7 +10,6 @@ final class ProjectReviewHandler
         private readonly FormValidator $validator,
         private readonly TurnstileValidator $turnstile,
         private readonly MailAdapterInterface $mail,
-        private readonly RateLimiter $rateLimiter,
         private readonly bool $requireTurnstile = true,
     ) {
     }
@@ -18,11 +17,6 @@ final class ProjectReviewHandler
     /** @param array<string, mixed> $input */
     public function handle(array $input, ?string $remoteIp = null): array
     {
-        $rateKey = $remoteIp ?? 'unknown';
-        if (!$this->rateLimiter->allow($rateKey)) {
-            return ['ok' => false, 'code' => 'rate_limited'];
-        }
-
         $validated = $this->validator->validate($input);
         if ($validated['ok'] === false) {
             return ['ok' => false, 'code' => $validated['code']];

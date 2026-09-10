@@ -49,19 +49,49 @@ export type ClientFormPayload = {
 
 export type ClientValidationResult =
   | { ok: true; data: ClientFormPayload }
-  | { ok: false; errors: string[] };
+  | { ok: false; errors: string[]; fieldErrors: Record<string, string> };
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const fieldLabels: Record<string, string> = {
+  name: 'Name',
+  business_name: 'Business / project name',
+  email: 'Email',
+  project_type: 'Project type',
+  current_url: 'Current site / product URL',
+  problem: 'Problem / desired outcome',
+  budget_band: 'Budget band',
+  timing: 'Timing',
+  must_have: 'Must-have features / integrations',
+  decision_path: 'Decision-maker / approval path',
+  ongoing_support: 'Expected ongoing support',
+  notes: 'Optional notes',
+};
 
 function withinLimit(value: string, max: number): boolean {
   return Array.from(value).length <= max;
 }
 
+function isValidHttpUrl(value: string): boolean {
+  try {
+    const url = new URL(value);
+    return url.protocol === 'http:' || url.protocol === 'https:';
+  } catch {
+    return false;
+  }
+}
+
 export function validateClientForm(input: Partial<ClientFormPayload>): ClientValidationResult {
   const errors: string[] = [];
+  const fieldErrors: Record<string, string> = {};
+
+  const addFieldError = (field: string, message: string) => {
+    fieldErrors[field] = message;
+    errors.push(`${fieldLabels[field] ?? field}: ${message}`);
+  };
 
   if (input.website && input.website.trim() !== '') {
-    errors.push('Invalid submission.');
+    addFieldError('website', 'Invalid submission.');
   }
 
   const requiredFields: Array<keyof ClientFormPayload> = [
@@ -80,26 +110,33 @@ export function validateClientForm(input: Partial<ClientFormPayload>): ClientVal
   for (const field of requiredFields) {
     const value = input[field];
     if (typeof value !== 'string' || value.trim() === '') {
-      errors.push(`Missing required field: ${field}`);
+      addFieldError(field, 'This field is required.');
     }
   }
 
   if (typeof input.email === 'string') {
     const email = input.email.trim();
     if (!emailPattern.test(email) || !withinLimit(email, fieldLimits.email)) {
-      errors.push('Invalid email address.');
+      addFieldError('email', 'Enter a valid email address.');
+    }
+  }
+
+  if (typeof input.current_url === 'string' && input.current_url.trim() !== '') {
+    const currentUrl = input.current_url.trim();
+    if (!withinLimit(currentUrl, fieldLimits.current_url) || !isValidHttpUrl(currentUrl)) {
+      addFieldError('current_url', 'Enter a valid http(s) URL or leave blank.');
     }
   }
 
   for (const [field, max] of Object.entries(fieldLimits) as Array<[keyof FormFieldLimits, number]>) {
     const value = input[field as keyof ClientFormPayload];
-    if (typeof value === 'string' && max > 0 && !withinLimit(value, max)) {
-      errors.push(`${field} exceeds maximum length.`);
+    if (typeof value === 'string' && max > 0 && !withinLimit(value, max) && !fieldErrors[field]) {
+      addFieldError(field, 'This field exceeds the maximum length.');
     }
   }
 
   if (errors.length > 0) {
-    return { ok: false, errors };
+    return { ok: false, errors, fieldErrors };
   }
 
   return {

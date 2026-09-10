@@ -5,20 +5,20 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
-    "build": "astro check && astro build",
+    "build": "astro check && astro build && node scripts/package-hostinger.mjs",
     "preview": "astro preview",
     "check": "astro check",
     "lint": "eslint .",
     "test": "vitest run",
-    "test:php": "php vendor/bin/phpunit --configuration phpunit.xml"
-  },
-  "dependencies": {
-    "astro": "^5.7.10"
+    "test:php": "php vendor/bin/phpunit --configuration phpunit.xml",
+    "capture:portfolio": "node scripts/capture-portfolio-images.mjs"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.4",
+    "@astrojs/check": "^0.9.10",
     "@types/node": "^22.14.0",
+    "astro": "^7.3.2",
     "eslint": "^9.24.0",
+    "playwright": "^1.63.0",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.30.0",
     "vitest": "^3.1.1"

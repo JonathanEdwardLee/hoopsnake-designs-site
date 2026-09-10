@@ -8,7 +8,6 @@ use Hsd\Api\FormValidator;
 use Hsd\Api\MailAdapterFactory;
 use Hsd\Api\NoSendMailAdapter;
 use Hsd\Api\ProjectReviewHandler;
-use Hsd\Api\RateLimiter;
 use Hsd\Api\SmtpMailAdapter;
 use Hsd\Api\TurnstileValidator;
 use PHPUnit\Framework\TestCase;
@@ -45,7 +44,6 @@ final class ProjectReviewHandlerTest extends TestCase
             new FormValidator(),
             new TurnstileValidator('secret', new FakeHttpClient('{"success":true}')),
             new NoSendMailAdapter(),
-            new RateLimiter(5, 900),
             requireTurnstile: false,
         );
 
@@ -73,7 +71,6 @@ final class ProjectReviewHandlerTest extends TestCase
             new FormValidator(),
             new TurnstileValidator('secret', new FakeHttpClient('{"success":true}')),
             new NoSendMailAdapter(),
-            new RateLimiter(5, 900),
             requireTurnstile: false,
         );
 
@@ -83,5 +80,32 @@ final class ProjectReviewHandlerTest extends TestCase
 
         self::assertFalse($result['ok']);
         self::assertSame('spam', $result['code']);
+    }
+
+    public function testTurnstileFailureReturnsVerificationCode(): void
+    {
+        $handler = new ProjectReviewHandler(
+            new FormValidator(),
+            new TurnstileValidator('secret', new FakeHttpClient('{"success":false}')),
+            new NoSendMailAdapter(),
+            requireTurnstile: true,
+        );
+
+        $result = $handler->handle([
+            'name' => 'Ada Lovelace',
+            'business_name' => 'Analytical Engines LLC',
+            'email' => 'ada@example.com',
+            'project_type' => 'Website / small site',
+            'problem' => 'Need a qualified lead system with premium presentation.',
+            'budget_band' => '$3,500 – $7,500',
+            'timing' => '1–2 months',
+            'must_have' => 'Project review form and one integration',
+            'decision_path' => 'Founder approves scope directly',
+            'ongoing_support' => 'One-time launch only',
+            'turnstile_token' => 'bad-token',
+        ], '127.0.0.1');
+
+        self::assertFalse($result['ok']);
+        self::assertSame('verification', $result['code']);
     }
 }

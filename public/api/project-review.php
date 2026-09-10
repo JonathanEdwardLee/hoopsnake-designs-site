@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-require_once dirname(__DIR__, 2) . '/vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 use Hsd\Api\CurlHttpClient;
 use Hsd\Api\FormValidator;
 use Hsd\Api\JsonResponse;
 use Hsd\Api\MailAdapterFactory;
 use Hsd\Api\ProjectReviewHandler;
-use Hsd\Api\RateLimiter;
 use Hsd\Api\TurnstileValidator;
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     JsonResponse::send(['ok' => false, 'code' => 'method_not_allowed'], 405);
 }
 
-$configPath = dirname(__DIR__) . '/config.php';
+$apiRoot = __DIR__;
+$configPath = $apiRoot . '/config.php';
 $config = file_exists($configPath)
     ? require $configPath
-    : require dirname(__DIR__) . '/config.example.php';
+    : require $apiRoot . '/config.example.php';
 
 $raw = file_get_contents('php://input');
 $input = json_decode($raw ?: '[]', true);
@@ -51,7 +51,6 @@ $handler = new ProjectReviewHandler(
     new FormValidator(),
     $turnstile,
     MailAdapterFactory::fromConfig($config),
-    new RateLimiter(maxRequests: 5, windowSeconds: 900),
     requireTurnstile: $mailMode === 'smtp',
 );
 

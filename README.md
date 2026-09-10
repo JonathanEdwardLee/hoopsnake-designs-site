@@ -36,7 +36,9 @@ npm run check
 
 ## Runtime configuration
 
-Copy `.env.example` values into Hostinger runtime configuration or a server-only `api/config.php` derived from `api/config.example.php`.
+Copy `.env.example` values into Hostinger runtime configuration or a server-only `dist/api/config.php` derived from `api/config.example.php`.
+
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for the Hostinger `dist/` topology and build expectations.
 
 - `mail_mode=nosend` for local/test environments
 - `mail_mode=smtp` for production once Hostinger SMTP credentials and Turnstile secrets are configured

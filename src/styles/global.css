@@ -204,4 +204,20 @@ a:hover { color: var(--hsd-accent-strong); }
   font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.12em;
   text-decoration: none; text-transform: uppercase;
 }
-.turnstile-frame { min-height: 4rem; }
+.portfolio-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  grid-row: 1 / span 2;
+  border-bottom: 1px solid var(--hsd-line);
+}
+.field-error, .form-error-summary {
+  color: var(--hsd-danger);
+  font-size: 0.85rem;
+  min-height: 1.1rem;
+}
+.form-error-summary {
+  border: 1px solid var(--hsd-danger);
+  padding: 0.75rem 1rem;
+}

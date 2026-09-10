@@ -6,6 +6,8 @@ export type PortfolioItem = {
   href: string;
   accent: string;
   label: string;
+  image: string;
+  imageAlt: string;
 };
 
 export const portfolioItems: PortfolioItem[] = [
@@ -14,10 +16,12 @@ export const portfolioItems: PortfolioItem[] = [
     title: 'Auto Detailing Guide',
     relationship: 'Owned PIM project',
     description:
-      'Scalable directory, search, and data publishing architecture for a long-running automotive resource brand.',
-    href: 'https://autodetailguide.com/',
+      'Scalable directory, search, and data publishing architecture for detailer discovery across locations and services.',
+    href: 'https://autodetailingguide.com/',
     accent: '#c8d4dc',
     label: 'DIR / SEARCH / DATA',
+    image: '/images/portfolio/auto-detailing-guide.webp',
+    imageAlt: 'Auto Detailing Guide search interface showing detailer discovery layout',
   },
   {
     id: 'can-i-borrow-this',
@@ -28,6 +32,8 @@ export const portfolioItems: PortfolioItem[] = [
     href: 'https://caniborrowthis.com/',
     accent: '#d9cfc4',
     label: 'GUIDED UX / ROUTING',
+    image: '/images/portfolio/can-i-borrow-this.webp',
+    imageAlt: 'Can I Borrow This guided consumer interface with routing choices',
   },
   {
     id: 'ozarkskey',
@@ -38,6 +44,8 @@ export const portfolioItems: PortfolioItem[] = [
     href: 'https://ozarkskey.com/',
     accent: '#b8c9b0',
     label: 'MAP / FILTER / DISCOVERY',
+    image: '/images/portfolio/ozarkskey.webp',
+    imageAlt: 'OzarksKey regional discovery map and filter interface',
   },
   {
     id: 'snorkleprawn',
@@ -48,6 +56,8 @@ export const portfolioItems: PortfolioItem[] = [
     href: 'https://snorkleprawn.com/',
     accent: '#f0c9a8',
     label: 'INTERACTIVE / CHARACTER',
+    image: '/images/portfolio/snorkleprawn.webp',
+    imageAlt: 'SnorklePrawn character-led interactive web presentation',
   },
   {
     id: 'junkfeathers',
@@ -58,16 +68,20 @@ export const portfolioItems: PortfolioItem[] = [
     href: 'https://junkfeathers.com/',
     accent: '#e8e8e8',
     label: 'ART DIRECTION / MACHINE UI',
+    image: '/images/portfolio/junkfeathers.webp',
+    imageAlt: 'Junkfeathers machine-interface homepage with monochrome art direction',
   },
   {
     id: 'orpheus-deck',
     title: 'Orpheus Deck',
     relationship: 'Junkfeathers Tech Android product by Jonathan',
     description:
-      'Native audio, mobile interaction, and product release work for a private four-track recorder app.',
+      'Shipped public Android product work: native audio, mobile interaction design, and Google Play release for a four-track recorder app.',
     href: 'https://junkfeathers.com/orpheus-deck/',
     accent: '#c4b8d9',
     label: 'NATIVE AUDIO / ANDROID',
+    image: '/images/portfolio/orpheus-deck.webp',
+    imageAlt: 'Orpheus Deck public product page showing Android app presentation',
   },
 ];
 

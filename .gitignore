@@ -1,8 +1,10 @@
 node_modules/
 .astro/
 .phpunit.cache/
-vendor/
+/vendor/
 .build-vendor/
+!site/api/vendor/
+!site/api/vendor/**
 .env
 .env.*
 !.env.example

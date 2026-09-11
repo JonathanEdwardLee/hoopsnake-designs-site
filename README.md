@@ -36,9 +36,9 @@ npm run check
 
 ## Runtime configuration
 
-Copy `.env.example` values into Hostinger runtime configuration or a server-only `dist/api/config.php` derived from `api/config.example.php`.
+Copy production SMTP and Turnstile secrets to `../hsd-private/project-review-config.php` outside the hosting document root (see `api/private-config.example.php` and [DEPLOYMENT.md](./DEPLOYMENT.md)).
 
-Build packages a directly deployable `site/` tree for Hostinger Advanced→Git (see [DEPLOYMENT.md](./DEPLOYMENT.md)).
+`npm run build` packages a document-root-ready `release/` artifact. Main-branch CI publishes verified runtime files to the `hostinger-deploy` branch.
 
 - `mail_mode=nosend` for local/test environments
 - `mail_mode=smtp` for production once Hostinger SMTP credentials and Turnstile secrets are configured

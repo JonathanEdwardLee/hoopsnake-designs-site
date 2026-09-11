@@ -15,11 +15,34 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     JsonResponse::send(['ok' => false, 'code' => 'method_not_allowed'], 405);
 }
 
-$apiRoot = __DIR__;
-$configPath = $apiRoot . '/config.php';
-$config = file_exists($configPath)
-    ? require $configPath
-    : require $apiRoot . '/config.example.php';
+/** @return array<string, mixed>|null */
+function hsd_load_runtime_config(): ?array
+{
+    $documentRoot = $_SERVER['DOCUMENT_ROOT'] ?? dirname(__DIR__);
+    $privateConfigPath = dirname(rtrim($documentRoot, '/\\')) . '/hsd-private/project-review-config.php';
+
+    if (is_readable($privateConfigPath)) {
+        $config = require $privateConfigPath;
+        return is_array($config) ? $config : null;
+    }
+
+    $testConfigPath = getenv('HSD_TEST_CONFIG_PATH');
+    if (is_string($testConfigPath) && $testConfigPath !== '' && is_readable($testConfigPath)) {
+        $config = require $testConfigPath;
+        return is_array($config) ? $config : null;
+    }
+
+    return null;
+}
+
+$config = hsd_load_runtime_config();
+if ($config === null) {
+    JsonResponse::send([
+        'ok' => false,
+        'code' => 'unavailable',
+        'message' => 'Project review delivery is not configured yet.',
+    ], 503);
+}
 
 $raw = file_get_contents('php://input');
 $input = json_decode($raw ?: '[]', true);
@@ -42,10 +65,14 @@ if ($mailMode === 'smtp') {
 }
 
 $turnstileSecret = (string) ($config['turnstile_secret'] ?? '');
-$turnstile = new TurnstileValidator(
-    $turnstileSecret !== '' ? $turnstileSecret : '1x0000000000000000000000000000000AA',
-    new CurlHttpClient(),
-);
+if ($mailMode === 'smtp') {
+    $turnstile = new TurnstileValidator($turnstileSecret, new CurlHttpClient());
+} else {
+    $secretForValidator = $turnstileSecret !== ''
+        ? $turnstileSecret
+        : '1x0000000000000000000000000000000AA';
+    $turnstile = new TurnstileValidator($secretForValidator, new CurlHttpClient());
+}
 
 $handler = new ProjectReviewHandler(
     new FormValidator(),

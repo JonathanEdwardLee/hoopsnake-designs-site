@@ -5,12 +5,16 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
-    "build": "astro check && astro build && node scripts/package-hostinger.mjs",
+    "build": "astro check && astro build && node scripts/package-release.mjs",
+    "build:production": "node scripts/build-production.mjs",
     "preview": "astro preview",
     "check": "astro check",
     "lint": "eslint .",
     "test": "vitest run",
     "test:php": "php vendor/bin/phpunit --configuration phpunit.xml",
+    "test:apache": "bash scripts/apache-integration-test.sh",
+    "report:release": "node scripts/report-release-tree.mjs",
+    "verify:release": "bash scripts/verify-release-artifact.sh",
     "capture:portfolio": "node scripts/capture-portfolio-images.mjs"
   },
   "devDependencies": {

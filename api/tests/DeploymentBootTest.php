@@ -17,7 +17,7 @@ final class DeploymentBootTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->artifactApi = dirname(__DIR__, 2) . '/site/api';
+        $this->artifactApi = dirname(__DIR__, 2) . '/release/api';
     }
 
     public function testPackagedArtifactLayoutIsSelfContained(): void
@@ -26,14 +26,15 @@ final class DeploymentBootTest extends TestCase
 
         self::assertDirectoryExists($this->artifactApi);
         self::assertFileExists($entrypoint);
-        self::assertFileExists($this->artifactApi . '/config.example.php');
         self::assertDirectoryExists($this->artifactApi . '/src');
         self::assertDirectoryExists($this->artifactApi . '/vendor');
         self::assertFileExists($this->artifactApi . '/vendor/autoload.php');
+        self::assertFileDoesNotExist($this->artifactApi . '/config.example.php');
+        self::assertFileDoesNotExist($this->artifactApi . '/config.php');
 
         $source = file_get_contents($entrypoint) ?: '';
         self::assertStringContainsString("__DIR__ . '/vendor/autoload.php'", $source);
-        self::assertStringContainsString('$apiRoot = __DIR__;', $source);
+        self::assertStringContainsString('hsd-private/project-review-config.php', $source);
     }
 
     /**
@@ -49,12 +50,6 @@ final class DeploymentBootTest extends TestCase
         self::assertTrue(class_exists(MailAdapterFactory::class));
         self::assertTrue(class_exists(ProjectReviewHandler::class));
         self::assertTrue(class_exists(NoSendMailAdapter::class));
-    }
-
-    public function testDefaultPackagedConfigUsesNoSendMode(): void
-    {
-        $config = require $this->artifactApi . '/config.example.php';
-        self::assertSame('nosend', $config['mail_mode'] ?? null);
     }
 
     public function testSmtpModeFailsClosedWithoutRuntimeSecrets(): void

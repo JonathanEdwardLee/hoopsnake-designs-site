@@ -3,7 +3,7 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
   site: 'https://hoopsnakedesigns.com',
   output: 'static',
-  outDir: 'site',
+  outDir: 'dist',
   build: {
     inlineStylesheets: 'auto',
   },

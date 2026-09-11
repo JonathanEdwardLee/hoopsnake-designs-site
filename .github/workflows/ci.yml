@@ -5,6 +5,9 @@ on:
   push:
     branches: [main]
 
+env:
+  PUBLIC_TURNSTILE_SITE_KEY: 1x00000000000000000000AA
+
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -23,9 +26,55 @@ jobs:
       - run: npm run check
       - run: npm test
       - run: npm run build
+      - run: npm run verify:release
       - run: npm run test:php
-      - run: bash scripts/verify-site-autoload.sh
-      - run: bash scripts/verify-deploy-mapping.sh
+      - run: bash scripts/verify-release-autoload.sh
+      - run: npm run report:release
+      - run: npm run test:apache
       - run: npm audit --audit-level=high
       - name: Verify no secret values in tracked files
         run: bash scripts/check-no-secrets.sh
+      - name: Upload release artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: hsd-release-${{ github.sha }}
+          path: release/
+          if-no-files-found: error
+
+  publish-hostinger-deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: verify
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: php-actions/composer@v6
+        with:
+          php_version: '8.3'
+          command: install
+      - name: Require production Turnstile site key
+        run: |
+          if [[ -z "${{ vars.HSD_TURNSTILE_SITE_KEY }}" ]]; then
+            echo "HSD_TURNSTILE_SITE_KEY repository variable is required to publish hostinger-deploy." >&2
+            exit 1
+          fi
+      - run: npm ci
+      - run: npm run build:production
+        env:
+          HSD_TURNSTILE_SITE_KEY: ${{ vars.HSD_TURNSTILE_SITE_KEY }}
+      - run: npm run verify:release
+      - run: npm run test:php
+      - run: bash scripts/verify-release-autoload.sh
+      - run: npm run test:apache
+      - name: Publish hostinger-deploy artifact branch
+        run: bash scripts/publish-hostinger-deploy.sh
+        env:
+          HSD_TURNSTILE_SITE_KEY: ${{ vars.HSD_TURNSTILE_SITE_KEY }}

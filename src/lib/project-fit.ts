@@ -4,7 +4,7 @@ const fitNotes: Record<string, string> = {
   'Below $3,500':
     'Launch System projects start at $3,500. Share your goals anyway — smaller scoped work may still be possible, or we can clarify boundaries early.',
   '$3,500 – $7,500':
-    'This band aligns with the Hoopsnake Launch System and focused custom work.',
+    'This band aligns with the Project Launch System and focused custom work.',
   '$7,500 – $15,000':
     'This range can support a richer Launch System build or a separately scoped app/tool engagement.',
   '$15,000+':

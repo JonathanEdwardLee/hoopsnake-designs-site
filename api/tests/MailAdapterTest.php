@@ -102,6 +102,68 @@ final class ProjectReviewHandlerTest extends TestCase
         self::assertSame('rate_limited', $result['code']);
     }
 
+    public function testRateLimitedBeforeValidationWhenCapExceeded(): void
+    {
+        $now = 1_700_000_000;
+        file_put_contents(
+            $this->throttlePath,
+            json_encode([
+                'timestamps' => array_fill(0, GlobalSubmissionThrottle::MAX_ATTEMPTS, $now - 30),
+            ], JSON_THROW_ON_ERROR),
+        );
+
+        $handler = new ProjectReviewHandler(
+            new FormValidator(),
+            new NoSendMailAdapter(),
+            new GlobalSubmissionThrottle($this->throttlePath, $now),
+        );
+
+        $result = $handler->handle(['website' => 'filled']);
+
+        self::assertFalse($result['ok']);
+        self::assertSame('rate_limited', $result['code']);
+    }
+
+    public function testHoneypotAttemptCountsTowardGlobalCap(): void
+    {
+        $now = 1_700_000_000;
+        $handler = new ProjectReviewHandler(
+            new FormValidator(),
+            new NoSendMailAdapter(),
+            new GlobalSubmissionThrottle($this->throttlePath, $now),
+        );
+
+        $result = $handler->handle(['website' => 'filled']);
+
+        self::assertFalse($result['ok']);
+        self::assertSame('spam', $result['code']);
+
+        $decoded = json_decode((string) file_get_contents($this->throttlePath), true);
+        self::assertIsArray($decoded);
+        self::assertCount(1, $decoded['timestamps']);
+        self::assertSame($now, $decoded['timestamps'][0]);
+    }
+
+    public function testInvalidAttemptCountsTowardGlobalCap(): void
+    {
+        $now = 1_700_000_000;
+        $handler = new ProjectReviewHandler(
+            new FormValidator(),
+            new NoSendMailAdapter(),
+            new GlobalSubmissionThrottle($this->throttlePath, $now),
+        );
+
+        $result = $handler->handle(['name' => '']);
+
+        self::assertFalse($result['ok']);
+        self::assertSame('validation', $result['code']);
+
+        $decoded = json_decode((string) file_get_contents($this->throttlePath), true);
+        self::assertIsArray($decoded);
+        self::assertCount(1, $decoded['timestamps']);
+        self::assertSame($now, $decoded['timestamps'][0]);
+    }
+
     /** @return array<string, string> */
     private function validPayload(): array
     {

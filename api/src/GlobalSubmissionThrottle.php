@@ -56,7 +56,13 @@ final class GlobalSubmissionThrottle
             ));
 
             if (count($timestamps) >= self::MAX_ATTEMPTS) {
-                $this->writeTimestamps($handle, $timestamps);
+                if (!$this->writeTimestamps($handle, $timestamps)) {
+                    flock($handle, LOCK_UN);
+                    fclose($handle);
+
+                    return ['allowed' => true, 'failOpen' => true];
+                }
+
                 flock($handle, LOCK_UN);
                 fclose($handle);
 

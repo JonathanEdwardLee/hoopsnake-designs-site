@@ -99,4 +99,21 @@ final class GlobalSubmissionThrottleTest extends TestCase
         self::assertArrayHasKey('timestamps', $decoded);
         self::assertSame(['timestamps'], array_keys($decoded));
     }
+
+    public function testFailsOpenWhenPersistingAtCapStateFails(): void
+    {
+        $now = 1_700_000_000;
+        $timestamps = array_fill(0, GlobalSubmissionThrottle::MAX_ATTEMPTS, $now - 60);
+        file_put_contents(
+            $this->storagePath,
+            json_encode(['timestamps' => $timestamps], JSON_THROW_ON_ERROR),
+        );
+        chmod($this->storagePath, 0444);
+
+        $throttle = new GlobalSubmissionThrottle($this->storagePath, $now);
+        $result = $throttle->checkAndRecord();
+
+        self::assertTrue($result['allowed']);
+        self::assertTrue($result['failOpen']);
+    }
 }

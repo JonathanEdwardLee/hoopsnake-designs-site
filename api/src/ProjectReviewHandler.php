@@ -16,16 +16,16 @@ final class ProjectReviewHandler
     /** @param array<string, mixed> $input */
     public function handle(array $input): array
     {
-        $validated = $this->validator->validate($input);
-        if ($validated['ok'] === false) {
-            return ['ok' => false, 'code' => $validated['code']];
-        }
-
         if ($this->throttle !== null) {
             $throttleResult = $this->throttle->checkAndRecord();
             if (!$throttleResult['allowed'] && !$throttleResult['failOpen']) {
                 return ['ok' => false, 'code' => 'rate_limited'];
             }
+        }
+
+        $validated = $this->validator->validate($input);
+        if ($validated['ok'] === false) {
+            return ['ok' => false, 'code' => $validated['code']];
         }
 
         if (!$this->mail->send($validated['data'])) {

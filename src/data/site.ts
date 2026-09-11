@@ -77,7 +77,7 @@ export const portfolioItems: PortfolioItem[] = [
     relationship: 'Junkfeathers Tech Android product by Jonathan',
     description:
       'Shipped public Android product work: native audio, mobile interaction design, and Google Play release for a four-track recorder app.',
-    href: 'https://junkfeathers.com/orpheus-deck/',
+    href: 'https://play.google.com/store/apps/details?id=com.junkfeathers.orpheusdeck',
     accent: '#c4b8d9',
     label: 'NATIVE AUDIO / ANDROID',
     image: '/images/portfolio/orpheus-deck.webp',

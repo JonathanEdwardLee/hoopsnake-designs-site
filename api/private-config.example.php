@@ -12,12 +12,12 @@ declare(strict_types=1);
  * Example: if DOCUMENT_ROOT is /home/account/public_html then place at:
  *   /home/account/hsd-private/project-review-config.php
  *
- * Do not commit real secrets to Git.
+ * Do not commit real secrets or mailbox addresses to Git.
  */
 return [
     'mail_mode' => 'smtp',
-    'to_address' => 'projects@hoopsnakedesigns.com',
-    'from_address' => 'projects@hoopsnakedesigns.com',
+    'to_address' => '',
+    'from_address' => '',
     'from_name' => 'Hoopsnake Designs',
     'smtp_host' => 'smtp.hostinger.com',
     'smtp_port' => 587,

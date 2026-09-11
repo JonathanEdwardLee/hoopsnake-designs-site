@@ -34,7 +34,8 @@ final class DeploymentBootTest extends TestCase
 
         $source = file_get_contents($entrypoint) ?: '';
         self::assertStringContainsString("__DIR__ . '/vendor/autoload.php'", $source);
-        self::assertStringContainsString('hsd-private/project-review-config.php', $source);
+        self::assertStringContainsString('RuntimeConfig::load', $source);
+        self::assertStringContainsString('RuntimeConfig::isAllowedForSource', $source);
     }
 
     /**

@@ -31,6 +31,7 @@ jobs:
       - run: bash scripts/verify-release-autoload.sh
       - run: npm run report:release
       - run: npm run test:apache
+      - run: bash scripts/verify-production-site-key-required.sh
       - run: npm audit --audit-level=high
       - name: Verify no secret values in tracked files
         run: bash scripts/check-no-secrets.sh

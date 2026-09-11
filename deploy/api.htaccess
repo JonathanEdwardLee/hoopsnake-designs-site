@@ -1,23 +1,10 @@
 # Protect internal PHP runtime material; only project-review.php is public.
 Options -Indexes
 
-<IfModule mod_authz_core.c>
-  <Files "config.php">
-    Require all denied
-  </Files>
-  <Files "config.example.php">
-    Require all denied
-  </Files>
-  <Files "composer.json">
-    Require all denied
-  </Files>
-  <Files "composer.lock">
-    Require all denied
-  </Files>
-</IfModule>
-
 <IfModule mod_rewrite.c>
   RewriteEngine On
+  RewriteRule ^config(\.example)?\.php$ - [F,L]
+  RewriteRule ^composer\.(json|lock)$ - [F,L]
   RewriteRule ^src(?:/|$) - [F,L]
   RewriteRule ^vendor(?:/|$) - [F,L]
 </IfModule>

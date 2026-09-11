@@ -9,40 +9,32 @@ use Hsd\Api\FormValidator;
 use Hsd\Api\JsonResponse;
 use Hsd\Api\MailAdapterFactory;
 use Hsd\Api\ProjectReviewHandler;
+use Hsd\Api\RuntimeConfig;
 use Hsd\Api\TurnstileValidator;
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     JsonResponse::send(['ok' => false, 'code' => 'method_not_allowed'], 405);
 }
 
-/** @return array<string, mixed>|null */
-function hsd_load_runtime_config(): ?array
-{
-    $documentRoot = $_SERVER['DOCUMENT_ROOT'] ?? dirname(__DIR__);
-    $privateConfigPath = dirname(rtrim($documentRoot, '/\\')) . '/hsd-private/project-review-config.php';
-
-    if (is_readable($privateConfigPath)) {
-        $config = require $privateConfigPath;
-        return is_array($config) ? $config : null;
-    }
-
-    $testConfigPath = getenv('HSD_TEST_CONFIG_PATH');
-    if (is_string($testConfigPath) && $testConfigPath !== '' && is_readable($testConfigPath)) {
-        $config = require $testConfigPath;
-        return is_array($config) ? $config : null;
-    }
-
-    return null;
-}
-
-$config = hsd_load_runtime_config();
-if ($config === null) {
+$documentRoot = $_SERVER['DOCUMENT_ROOT'] ?? dirname(__DIR__);
+$loaded = RuntimeConfig::load($documentRoot);
+if ($loaded === null) {
     JsonResponse::send([
         'ok' => false,
         'code' => 'unavailable',
         'message' => 'Project review delivery is not configured yet.',
     ], 503);
 }
+
+if (!RuntimeConfig::isAllowedForSource($loaded)) {
+    JsonResponse::send([
+        'ok' => false,
+        'code' => 'unavailable',
+        'message' => 'Project review delivery is not configured yet.',
+    ], 503);
+}
+
+$config = $loaded['config'];
 
 $raw = file_get_contents('php://input');
 $input = json_decode($raw ?: '[]', true);

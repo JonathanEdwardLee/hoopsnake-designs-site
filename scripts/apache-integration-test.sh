@@ -20,25 +20,35 @@ docker_cmd() {
   fi
 }
 
-docker_cmd build -t "$IMAGE" "$ROOT/docker/apache-test"
+start_container() {
+  local private_config_mount="${1:-}"
 
-docker_cmd rm -f "$CONTAINER" >/dev/null 2>&1 || true
-docker_cmd run -d --name "$CONTAINER" \
-  -p 18080:80 \
-  -v "$RELEASE:/var/www/html:ro" \
-  "$IMAGE" >/dev/null
-
-cleanup() {
   docker_cmd rm -f "$CONTAINER" >/dev/null 2>&1 || true
-}
-trap cleanup EXIT
 
-for _ in $(seq 1 30); do
-  if curl -fsS "$BASE_URL/" >/dev/null 2>&1; then
-    break
+  local run_args=(
+    run -d --name "$CONTAINER"
+    -p 18080:80
+    -v "$RELEASE:/var/www/html:ro"
+  )
+
+  if [[ -n "$private_config_mount" ]]; then
+    run_args+=(-v "$private_config_mount:/var/www/hsd-private:ro")
   fi
-  sleep 1
-done
+
+  docker_cmd "${run_args[@]}" "$IMAGE" >/dev/null
+}
+
+wait_for_server() {
+  for _ in $(seq 1 30); do
+    if curl -fsS "$BASE_URL/" >/dev/null 2>&1; then
+      return 0
+    fi
+    sleep 1
+  done
+
+  echo "Apache container did not become ready" >&2
+  exit 1
+}
 
 request() {
   local method="$1"
@@ -84,6 +94,17 @@ assert_body_not_contains() {
   echo "PASS: $label does not expose $needle"
 }
 
+docker_cmd build -t "$IMAGE" "$ROOT/docker/apache-test"
+
+cleanup() {
+  docker_cmd rm -f "$CONTAINER" >/dev/null 2>&1 || true
+  rm -rf "${PRIVATE_CONFIG_DIR:-}"
+}
+trap cleanup EXIT
+
+start_container
+wait_for_server
+
 status="$(request GET /)"
 assert_status "GET /" 200 "$status"
 assert_body_contains "GET /" "Hoopsnake Launch System"
@@ -127,11 +148,9 @@ assert_status "GET /api/src/FormValidator.php" 403 "$status"
 status="$(request GET /api/vendor/autoload.php)"
 assert_status "GET /api/vendor/autoload.php" 403 "$status"
 
-for denied_config in config.example.php config.php composer.json composer.lock; do
-  if [[ -f "$RELEASE/api/$denied_config" ]]; then
-    status="$(request GET "/api/$denied_config")"
-    assert_status "GET /api/$denied_config" 403 "$status"
-  fi
+for config_path in /api/config.php /api/config.example.php; do
+  status="$(request GET "$config_path")"
+  assert_status "GET $config_path" 403 "$status"
 done
 
 for absent_path in /site/index.html /src/pages/index.astro /package.json; do
@@ -146,5 +165,24 @@ done
 status="$(request GET /api/project-review.php)"
 assert_body_not_contains "PHP source not returned" '<?php'
 assert_body_contains "JSON response from PHP" '"code":"method_not_allowed"'
+
+PRIVATE_CONFIG_DIR="$(mktemp -d)"
+cat > "$PRIVATE_CONFIG_DIR/project-review-config.php" <<'PHP'
+<?php
+
+declare(strict_types=1);
+
+return [
+    'mail_mode' => 'nosend',
+];
+PHP
+
+start_container "$PRIVATE_CONFIG_DIR"
+wait_for_server
+
+status="$(request POST /api/project-review.php "$post_payload")"
+assert_status "POST with production-shaped nosend private config" 503 "$status"
+assert_body_contains "production nosend unavailable" '"code":"unavailable"'
+assert_body_not_contains "production nosend must not succeed" '"code":"received"'
 
 echo "Apache + PHP integration test passed."

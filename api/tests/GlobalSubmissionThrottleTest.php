@@ -9,18 +9,19 @@ use PHPUnit\Framework\TestCase;
 
 final class GlobalSubmissionThrottleTest extends TestCase
 {
+    private string $storageDir;
     private string $storagePath;
 
     protected function setUp(): void
     {
-        $this->storagePath = sys_get_temp_dir() . '/hsd-throttle-' . uniqid('', true) . '.json';
+        $this->storageDir = sys_get_temp_dir() . '/hsd-throttle-' . uniqid('', true);
+        mkdir($this->storageDir, 0777, true);
+        $this->storagePath = $this->storageDir . '/project-review-throttle.json';
     }
 
     protected function tearDown(): void
     {
-        if (is_file($this->storagePath)) {
-            unlink($this->storagePath);
-        }
+        $this->removeDirectory($this->storageDir);
     }
 
     public function testAllowsRequestsBelowCap(): void
@@ -50,6 +51,7 @@ final class GlobalSubmissionThrottleTest extends TestCase
             $this->storagePath,
             json_encode(['timestamps' => $timestamps], JSON_THROW_ON_ERROR),
         );
+        file_put_contents($this->storagePath . '.lock', '');
 
         $throttle = new GlobalSubmissionThrottle($this->storagePath, $now);
         $result = $throttle->checkAndRecord();
@@ -100,7 +102,7 @@ final class GlobalSubmissionThrottleTest extends TestCase
         self::assertSame(['timestamps'], array_keys($decoded));
     }
 
-    public function testFailsOpenWhenPersistingAtCapStateFails(): void
+    public function testFailsOpenWhenPersistingAtCapStateFailsAfterSuccessfulRead(): void
     {
         $now = 1_700_000_000;
         $timestamps = array_fill(0, GlobalSubmissionThrottle::MAX_ATTEMPTS, $now - 60);
@@ -108,12 +110,44 @@ final class GlobalSubmissionThrottleTest extends TestCase
             $this->storagePath,
             json_encode(['timestamps' => $timestamps], JSON_THROW_ON_ERROR),
         );
-        chmod($this->storagePath, 0444);
+        file_put_contents($this->storagePath . '.lock', '');
+        chmod($this->storageDir, 0555);
 
         $throttle = new GlobalSubmissionThrottle($this->storagePath, $now);
         $result = $throttle->checkAndRecord();
 
+        chmod($this->storageDir, 0755);
+
         self::assertTrue($result['allowed']);
         self::assertTrue($result['failOpen']);
+    }
+
+    private function removeDirectory(string $directory): void
+    {
+        if (!is_dir($directory)) {
+            return;
+        }
+
+        $items = scandir($directory);
+        if ($items === false) {
+            return;
+        }
+
+        foreach ($items as $item) {
+            if ($item === '.' || $item === '..') {
+                continue;
+            }
+
+            $path = $directory . '/' . $item;
+            if (is_dir($path)) {
+                $this->removeDirectory($path);
+            } else {
+                @chmod($path, 0666);
+                unlink($path);
+            }
+        }
+
+        @chmod($directory, 0755);
+        rmdir($directory);
     }
 }

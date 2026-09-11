@@ -12,6 +12,7 @@
     "test": "vitest run",
     "test:php": "php vendor/bin/phpunit --configuration phpunit.xml",
     "test:apache": "bash scripts/apache-integration-test.sh",
+    "test:publish": "bash scripts/test-publish-hostinger-deploy.sh",
     "report:release": "node scripts/report-release-tree.mjs",
     "verify:release": "bash scripts/verify-release-artifact.sh",
     "verify:no-external-verification": "bash scripts/verify-no-cloudflare.sh",

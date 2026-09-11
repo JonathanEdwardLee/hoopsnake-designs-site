@@ -1,0 +1,13 @@
+# Hoopsnake Designs — document-root security hardening
+# Normal public URLs map directly to filesystem paths (no rewrite mapping).
+
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Block accidental source/dev paths if present in the artifact
+  RewriteRule ^site(?:/|$) - [F,L]
+  RewriteRule ^src(?:/|$) - [F,L]
+  RewriteRule ^package\.json$ - [F,L]
+</IfModule>

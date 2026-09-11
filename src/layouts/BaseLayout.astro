@@ -2,13 +2,11 @@
 interface Props {
   title?: string;
   description?: string;
-  turnstileSiteKey?: string;
 }
 
 const {
   title = 'Hoopsnake Designs — Premium custom websites and qualified-lead systems',
   description = 'Hoopsnake Launch System: premium custom website and qualified-lead system for small businesses, creators, and service operators. Projects start at $3,500.',
-  turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '1x00000000000000000000AA',
 } = Astro.props;
 
 const canonical = 'https://hoopsnakedesigns.com/';
@@ -63,9 +61,6 @@ const canonical = 'https://hoopsnakedesigns.com/';
         </div>
       </footer>
     </div>
-    <script is:inline define:vars={{ turnstileSiteKey }}>
-      window.__HSD_TURNSTILE_SITE_KEY__ = turnstileSiteKey;
-    </script>
   </body>
 </html>
 

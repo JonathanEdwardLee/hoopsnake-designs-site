@@ -44,7 +44,6 @@ export type ClientFormPayload = {
   ongoing_support: string;
   notes?: string;
   website?: string;
-  turnstile_token?: string;
 };
 
 export type ClientValidationResult =
@@ -155,7 +154,6 @@ export function validateClientForm(input: Partial<ClientFormPayload>): ClientVal
       ongoing_support: input.ongoing_support!.trim(),
       notes: input.notes?.trim() || undefined,
       website: input.website?.trim() || undefined,
-      turnstile_token: input.turnstile_token?.trim() || undefined,
     },
   };
 }

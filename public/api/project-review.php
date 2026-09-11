@@ -4,22 +4,36 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-use Hsd\Api\CurlHttpClient;
 use Hsd\Api\FormValidator;
+use Hsd\Api\GlobalSubmissionThrottle;
 use Hsd\Api\JsonResponse;
 use Hsd\Api\MailAdapterFactory;
 use Hsd\Api\ProjectReviewHandler;
-use Hsd\Api\TurnstileValidator;
+use Hsd\Api\RuntimeConfig;
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     JsonResponse::send(['ok' => false, 'code' => 'method_not_allowed'], 405);
 }
 
-$apiRoot = __DIR__;
-$configPath = $apiRoot . '/config.php';
-$config = file_exists($configPath)
-    ? require $configPath
-    : require $apiRoot . '/config.example.php';
+$documentRoot = $_SERVER['DOCUMENT_ROOT'] ?? dirname(__DIR__);
+$loaded = RuntimeConfig::load($documentRoot);
+if ($loaded === null) {
+    JsonResponse::send([
+        'ok' => false,
+        'code' => 'unavailable',
+        'message' => 'Project review delivery is not configured yet.',
+    ], 503);
+}
+
+if (!RuntimeConfig::isAllowedForSource($loaded)) {
+    JsonResponse::send([
+        'ok' => false,
+        'code' => 'unavailable',
+        'message' => 'Project review delivery is not configured yet.',
+    ], 503);
+}
+
+$config = $loaded['config'];
 
 $raw = file_get_contents('php://input');
 $input = json_decode($raw ?: '[]', true);
@@ -29,7 +43,7 @@ if (!is_array($input)) {
 
 $mailMode = $config['mail_mode'] ?? 'nosend';
 if ($mailMode === 'smtp') {
-    $required = ['to_address', 'from_address', 'smtp_user', 'smtp_pass', 'turnstile_secret'];
+    $required = ['to_address', 'from_address', 'smtp_user', 'smtp_pass'];
     foreach ($required as $key) {
         if (empty($config[$key])) {
             JsonResponse::send([
@@ -41,21 +55,13 @@ if ($mailMode === 'smtp') {
     }
 }
 
-$turnstileSecret = (string) ($config['turnstile_secret'] ?? '');
-$turnstile = new TurnstileValidator(
-    $turnstileSecret !== '' ? $turnstileSecret : '1x0000000000000000000000000000000AA',
-    new CurlHttpClient(),
-);
-
 $handler = new ProjectReviewHandler(
     new FormValidator(),
-    $turnstile,
     MailAdapterFactory::fromConfig($config),
-    requireTurnstile: $mailMode === 'smtp',
+    new GlobalSubmissionThrottle(GlobalSubmissionThrottle::storagePathForDocumentRoot($documentRoot)),
 );
 
-$remoteIp = $_SERVER['REMOTE_ADDR'] ?? null;
-$result = $handler->handle($input, is_string($remoteIp) ? $remoteIp : null);
+$result = $handler->handle($input);
 
 $status = match ($result['code']) {
     'received' => 200,

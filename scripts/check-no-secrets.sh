@@ -11,9 +11,4 @@ if git grep -E 'HSD_SMTP_PASS=[^[:space:][:punct:]]+' -- ':!*.example.*' ':!scri
   exit 1
 fi
 
-if git grep -E 'HSD_TURNSTILE_SECRET=[^[:space:][:punct:]]+' -- ':!*.example.*' ':!scripts/check-no-secrets.sh'; then
-  echo "Turnstile secret value found in tracked files." >&2
-  exit 1
-fi
-
 echo "No secret values detected in tracked source files."

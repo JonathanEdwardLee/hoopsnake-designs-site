@@ -1,0 +1,10 @@
+# Protect internal PHP runtime material; only project-review.php is public.
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^config(\.example)?\.php$ - [F,L]
+  RewriteRule ^composer\.(json|lock)$ - [F,L]
+  RewriteRule ^src(?:/|$) - [F,L]
+  RewriteRule ^vendor(?:/|$) - [F,L]
+</IfModule>

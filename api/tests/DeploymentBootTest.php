@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Hsd\Api\Tests;
 
 use Hsd\Api\FormValidator;
+use Hsd\Api\GlobalSubmissionThrottle;
 use Hsd\Api\MailAdapterFactory;
 use Hsd\Api\NoSendMailAdapter;
 use Hsd\Api\ProjectReviewHandler;
-use Hsd\Api\TurnstileValidator;
 use PHPUnit\Framework\TestCase;
 
 final class DeploymentBootTest extends TestCase
@@ -17,7 +17,7 @@ final class DeploymentBootTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->artifactApi = dirname(__DIR__, 2) . '/site/api';
+        $this->artifactApi = dirname(__DIR__, 2) . '/release/api';
     }
 
     public function testPackagedArtifactLayoutIsSelfContained(): void
@@ -26,14 +26,16 @@ final class DeploymentBootTest extends TestCase
 
         self::assertDirectoryExists($this->artifactApi);
         self::assertFileExists($entrypoint);
-        self::assertFileExists($this->artifactApi . '/config.example.php');
         self::assertDirectoryExists($this->artifactApi . '/src');
         self::assertDirectoryExists($this->artifactApi . '/vendor');
         self::assertFileExists($this->artifactApi . '/vendor/autoload.php');
+        self::assertFileDoesNotExist($this->artifactApi . '/config.example.php');
+        self::assertFileDoesNotExist($this->artifactApi . '/config.php');
 
         $source = file_get_contents($entrypoint) ?: '';
         self::assertStringContainsString("__DIR__ . '/vendor/autoload.php'", $source);
-        self::assertStringContainsString('$apiRoot = __DIR__;', $source);
+        self::assertStringContainsString('RuntimeConfig::load', $source);
+        self::assertStringContainsString('GlobalSubmissionThrottle', $source);
     }
 
     /**
@@ -45,22 +47,16 @@ final class DeploymentBootTest extends TestCase
         require $this->artifactApi . '/vendor/autoload.php';
 
         self::assertTrue(class_exists(FormValidator::class));
-        self::assertTrue(class_exists(TurnstileValidator::class));
+        self::assertTrue(class_exists(GlobalSubmissionThrottle::class));
         self::assertTrue(class_exists(MailAdapterFactory::class));
         self::assertTrue(class_exists(ProjectReviewHandler::class));
         self::assertTrue(class_exists(NoSendMailAdapter::class));
     }
 
-    public function testDefaultPackagedConfigUsesNoSendMode(): void
-    {
-        $config = require $this->artifactApi . '/config.example.php';
-        self::assertSame('nosend', $config['mail_mode'] ?? null);
-    }
-
     public function testSmtpModeFailsClosedWithoutRuntimeSecrets(): void
     {
         $config = ['mail_mode' => 'smtp'];
-        $required = ['to_address', 'from_address', 'smtp_user', 'smtp_pass', 'turnstile_secret'];
+        $required = ['to_address', 'from_address', 'smtp_user', 'smtp_pass'];
 
         foreach ($required as $key) {
             self::assertEmpty($config[$key] ?? null);

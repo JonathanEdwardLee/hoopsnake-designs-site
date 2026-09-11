@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Hsd\Api\Tests;
 
 use Hsd\Api\FormValidator;
+use Hsd\Api\GlobalSubmissionThrottle;
 use Hsd\Api\MailAdapterFactory;
 use Hsd\Api\NoSendMailAdapter;
 use Hsd\Api\ProjectReviewHandler;
 use Hsd\Api\SmtpMailAdapter;
-use Hsd\Api\TurnstileValidator;
 use PHPUnit\Framework\TestCase;
 
 final class MailAdapterTest extends TestCase
@@ -38,28 +38,28 @@ final class MailAdapterTest extends TestCase
 
 final class ProjectReviewHandlerTest extends TestCase
 {
+    private string $throttlePath;
+
+    protected function setUp(): void
+    {
+        $this->throttlePath = sys_get_temp_dir() . '/hsd-handler-throttle-' . uniqid('', true) . '.json';
+    }
+
+    protected function tearDown(): void
+    {
+        if (is_file($this->throttlePath)) {
+            unlink($this->throttlePath);
+        }
+    }
+
     public function testSuccessfulNoSendFlow(): void
     {
         $handler = new ProjectReviewHandler(
             new FormValidator(),
-            new TurnstileValidator('secret', new FakeHttpClient('{"success":true}')),
             new NoSendMailAdapter(),
-            requireTurnstile: false,
         );
 
-        $result = $handler->handle([
-            'name' => 'Ada Lovelace',
-            'business_name' => 'Analytical Engines LLC',
-            'email' => 'ada@example.com',
-            'project_type' => 'Website / small site',
-            'problem' => 'Need a qualified lead system with premium presentation.',
-            'budget_band' => '$3,500 – $7,500',
-            'timing' => '1–2 months',
-            'must_have' => 'Project review form and one integration',
-            'decision_path' => 'Founder approves scope directly',
-            'ongoing_support' => 'One-time launch only',
-            'turnstile_token' => 'test-token',
-        ], '127.0.0.1');
+        $result = $handler->handle($this->validPayload());
 
         self::assertTrue($result['ok']);
         self::assertSame('received', $result['code']);
@@ -69,29 +69,105 @@ final class ProjectReviewHandlerTest extends TestCase
     {
         $handler = new ProjectReviewHandler(
             new FormValidator(),
-            new TurnstileValidator('secret', new FakeHttpClient('{"success":true}')),
             new NoSendMailAdapter(),
-            requireTurnstile: false,
         );
 
         $result = $handler->handle([
             'website' => 'filled',
-        ], '127.0.0.1');
+        ]);
 
         self::assertFalse($result['ok']);
         self::assertSame('spam', $result['code']);
     }
 
-    public function testTurnstileFailureReturnsVerificationCode(): void
+    public function testRateLimitedWhenGlobalCapExceeded(): void
     {
-        $handler = new ProjectReviewHandler(
-            new FormValidator(),
-            new TurnstileValidator('secret', new FakeHttpClient('{"success":false}')),
-            new NoSendMailAdapter(),
-            requireTurnstile: true,
+        $now = 1_700_000_000;
+        file_put_contents(
+            $this->throttlePath,
+            json_encode([
+                'timestamps' => array_fill(0, GlobalSubmissionThrottle::MAX_ATTEMPTS, $now - 30),
+            ], JSON_THROW_ON_ERROR),
         );
 
-        $result = $handler->handle([
+        $handler = new ProjectReviewHandler(
+            new FormValidator(),
+            new NoSendMailAdapter(),
+            new GlobalSubmissionThrottle($this->throttlePath, $now),
+        );
+
+        $result = $handler->handle($this->validPayload());
+
+        self::assertFalse($result['ok']);
+        self::assertSame('rate_limited', $result['code']);
+    }
+
+    public function testRateLimitedBeforeValidationWhenCapExceeded(): void
+    {
+        $now = 1_700_000_000;
+        file_put_contents(
+            $this->throttlePath,
+            json_encode([
+                'timestamps' => array_fill(0, GlobalSubmissionThrottle::MAX_ATTEMPTS, $now - 30),
+            ], JSON_THROW_ON_ERROR),
+        );
+
+        $handler = new ProjectReviewHandler(
+            new FormValidator(),
+            new NoSendMailAdapter(),
+            new GlobalSubmissionThrottle($this->throttlePath, $now),
+        );
+
+        $result = $handler->handle(['website' => 'filled']);
+
+        self::assertFalse($result['ok']);
+        self::assertSame('rate_limited', $result['code']);
+    }
+
+    public function testHoneypotAttemptCountsTowardGlobalCap(): void
+    {
+        $now = 1_700_000_000;
+        $handler = new ProjectReviewHandler(
+            new FormValidator(),
+            new NoSendMailAdapter(),
+            new GlobalSubmissionThrottle($this->throttlePath, $now),
+        );
+
+        $result = $handler->handle(['website' => 'filled']);
+
+        self::assertFalse($result['ok']);
+        self::assertSame('spam', $result['code']);
+
+        $decoded = json_decode((string) file_get_contents($this->throttlePath), true);
+        self::assertIsArray($decoded);
+        self::assertCount(1, $decoded['timestamps']);
+        self::assertSame($now, $decoded['timestamps'][0]);
+    }
+
+    public function testInvalidAttemptCountsTowardGlobalCap(): void
+    {
+        $now = 1_700_000_000;
+        $handler = new ProjectReviewHandler(
+            new FormValidator(),
+            new NoSendMailAdapter(),
+            new GlobalSubmissionThrottle($this->throttlePath, $now),
+        );
+
+        $result = $handler->handle(['name' => '']);
+
+        self::assertFalse($result['ok']);
+        self::assertSame('validation', $result['code']);
+
+        $decoded = json_decode((string) file_get_contents($this->throttlePath), true);
+        self::assertIsArray($decoded);
+        self::assertCount(1, $decoded['timestamps']);
+        self::assertSame($now, $decoded['timestamps'][0]);
+    }
+
+    /** @return array<string, string> */
+    private function validPayload(): array
+    {
+        return [
             'name' => 'Ada Lovelace',
             'business_name' => 'Analytical Engines LLC',
             'email' => 'ada@example.com',
@@ -102,10 +178,6 @@ final class ProjectReviewHandlerTest extends TestCase
             'must_have' => 'Project review form and one integration',
             'decision_path' => 'Founder approves scope directly',
             'ongoing_support' => 'One-time launch only',
-            'turnstile_token' => 'bad-token',
-        ], '127.0.0.1');
-
-        self::assertFalse($result['ok']);
-        self::assertSame('verification', $result['code']);
+        ];
     }
 }

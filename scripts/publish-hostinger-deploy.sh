@@ -44,7 +44,10 @@ if git -C "$WORKTREE" diff --cached --quiet; then
   exit 0
 fi
 
-git -C "$WORKTREE" commit -m "deploy: $SOURCE_SHA"
+git -C "$WORKTREE" \
+  -c user.name="${GIT_AUTHOR_NAME:-github-actions[bot]}" \
+  -c user.email="${GIT_AUTHOR_EMAIL:-41898282+github-actions[bot]@users.noreply.github.com}" \
+  commit -m "deploy: $SOURCE_SHA"
 git -C "$WORKTREE" push origin "$BRANCH" --force-with-lease
 
 echo "Published hostinger-deploy at deploy: $SOURCE_SHA"

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&family=Rakkas&display=swap');
 
 :root {
   color-scheme: dark;
@@ -14,7 +14,7 @@
   --hsd-danger: #ff8d8d;
   --hsd-success: #9fd5a8;
   --hsd-max: 74rem;
-  --font-display: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  --font-display: 'Rakkas', Georgia, 'Times New Roman', serif;
   --font-body: 'Manrope', system-ui, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
   --space-3: 1rem;
@@ -78,7 +78,7 @@ a:hover { color: var(--hsd-accent-strong); }
 }
 .section-title {
   font-family: var(--font-display); font-size: clamp(2.2rem, 5vw, 4rem);
-  line-height: 1.05; margin: 0 0 1.5rem; max-width: 16ch;
+  line-height: 1.08; letter-spacing: 0.01em; margin: 0 0 1.5rem; max-width: 16ch;
 }
 .section-lead { color: var(--hsd-fg-muted); font-size: clamp(1.05rem, 2vw, 1.25rem); margin: 0; max-width: 62ch; }
 .machine-panel {
@@ -100,7 +100,7 @@ a:hover { color: var(--hsd-accent-strong); }
 @media (min-width: 960px) { .hero-grid { grid-template-columns: 1.05fr 0.95fr; } }
 .hero-copy h1 {
   font-family: var(--font-display); font-size: clamp(2.8rem, 7vw, 5.5rem);
-  line-height: 0.98; margin: 0 0 1.5rem; max-width: 12ch;
+  line-height: 1.02; letter-spacing: 0.01em; margin: 0 0 1.5rem; max-width: 12ch;
 }
 .hero-copy .hero-price {
   color: var(--hsd-accent-strong); font-family: var(--font-mono); font-size: 0.85rem;
@@ -109,8 +109,19 @@ a:hover { color: var(--hsd-accent-strong); }
 .hero-copy p { color: var(--hsd-fg-muted); font-size: clamp(1.05rem, 2.2vw, 1.3rem); margin: 0 0 2rem; max-width: 42ch; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 1rem; }
 .hero-device { position: relative; min-height: 22rem; }
-.hoopsnake-loop { position: relative; width: min(100%, 28rem); margin-inline: auto; aspect-ratio: 1; }
-.loop-ring { position: absolute; inset: 8%; border: 1px solid var(--hsd-line); border-radius: 50%; }
+.hoopsnake-loop {
+  position: relative; width: min(100%, 28rem); margin-inline: auto; aspect-ratio: 1;
+  touch-action: pan-y; --pointer-x: 0; --pointer-y: 0;
+}
+.loop-interior {
+  position: relative; width: 100%; height: 100%;
+  transform: perspective(900px) rotateX(var(--tilt-y, 0deg)) rotateY(var(--tilt-x, 0deg));
+  transform-style: preserve-3d;
+}
+.loop-ring {
+  position: absolute; inset: 8%; border: 1px solid var(--hsd-line); border-radius: 50%;
+  transform: translate(calc(var(--pointer-x) * 10px), calc(var(--pointer-y) * 10px));
+}
 .loop-ring::before {
   content: ''; position: absolute; inset: 18%; border: 1px dashed rgba(216,195,165,0.35); border-radius: 50%;
 }
@@ -121,13 +132,13 @@ a:hover { color: var(--hsd-accent-strong); }
 .loop-node:nth-child(3) { bottom: 4%; left: 50%; transform: translateX(-50%); }
 .loop-node:nth-child(4) { top: 50%; left: 4%; transform: translateY(-50%); }
 .loop-core {
-  position: absolute; inset: 28%; border: 1px solid var(--hsd-line);
+  position: absolute; inset: 24%; border: 1px solid var(--hsd-line);
   display: grid; place-items: center; text-align: center; padding: 1rem;
+  transform: translate(calc(var(--pointer-x) * 6px), calc(var(--pointer-y) * 6px));
 }
-.loop-core strong { display: block; font-family: var(--font-display); font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1; }
-.loop-core span {
-  color: var(--hsd-fg-muted); font-family: var(--font-mono); font-size: 0.68rem;
-  letter-spacing: 0.14em; margin-top: 0.5rem; text-transform: uppercase;
+.loop-core strong {
+  display: block; font-family: var(--font-display); font-size: clamp(1.15rem, 2.4vw, 1.65rem);
+  line-height: 1.15; letter-spacing: 0.01em; max-width: 11ch;
 }
 @keyframes loop-spin { to { transform: rotate(360deg); } }
 .breadth-grid, .process-grid, .faq-grid, .launch-stack, .fit-shell, .form-grid { display: grid; gap: 1.5rem; }

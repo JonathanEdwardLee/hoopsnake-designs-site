@@ -100,7 +100,7 @@ if (root) {
       if (result.ok && result.code === 'received') {
         form.hidden = true;
         if (success) success.hidden = false;
-        setStatus('Submission received. Hoopsnake reviews fit before scheduling a call.', 'success');
+        setStatus('Submission received. Jonathan reviews fit before scheduling a call.', 'success');
         return;
       }
 

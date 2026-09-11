@@ -23,15 +23,13 @@ public_html/
     project-review.php
     src/
     vendor/
+
+../hsd-private/
+  project-review-config.php
+  project-review-throttle.json
 ```
 
-Production secrets live outside `public_html`:
-
-```text
-../hsd-private/project-review-config.php
-```
-
-resolved relative to `DOCUMENT_ROOT`. See `api/private-config.example.php` for the template.
+Production secrets and throttle state live outside `public_html` under `../hsd-private/`, resolved relative to `DOCUMENT_ROOT`. See `api/private-config.example.php` for the SMTP config template.
 
 Public URLs map directly to filesystem paths:
 
@@ -70,7 +68,6 @@ npm run build
 
 Production artifact publication (main branch CI only):
 
-- requires repository variable `HSD_TURNSTILE_SITE_KEY`
 - publishes verified `release/` contents to `hostinger-deploy`
 
 CI verifies:
@@ -78,8 +75,19 @@ CI verifies:
 1. lint / typecheck / JS tests
 2. `npm run build`
 3. release artifact layout checks
-4. PHP unit tests + packaged autoload verification
-5. real Apache 2.4 + PHP 8.x HTTP integration test
-6. audit + secret-value hygiene check
+4. no external verification-widget references in source or artifact
+5. PHP unit tests + packaged autoload verification
+6. real Apache 2.4 + PHP 8.x HTTP integration test
+7. audit + secret-value hygiene check
 
 PR CI builds and tests the artifact but does **not** update `hostinger-deploy`.
+
+## Anti-abuse boundary
+
+V1 uses honeypot, strict server-side validation/length limits, and a PHP-native global throttle:
+
+- throttle file: `../hsd-private/project-review-throttle.json`
+- rolling window: 10 minutes
+- cap: 20 POST attempts
+- stores timestamps only; no visitor identifiers
+- fails open if throttle storage is unavailable

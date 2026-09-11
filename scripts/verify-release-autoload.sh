@@ -5,7 +5,7 @@ php -r "
 require 'release/api/vendor/autoload.php';
 \$classes = [
   'Hsd\\\\Api\\\\FormValidator',
-  'Hsd\\\\Api\\\\TurnstileValidator',
+  'Hsd\\\\Api\\\\GlobalSubmissionThrottle',
   'Hsd\\\\Api\\\\MailAdapterFactory',
   'Hsd\\\\Api\\\\ProjectReviewHandler',
   'Hsd\\\\Api\\\\NoSendMailAdapter',

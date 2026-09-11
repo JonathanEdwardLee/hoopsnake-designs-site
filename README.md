@@ -8,7 +8,7 @@ Product implementation is performed by CloudDev through bounded branch/PR work a
 
 - Astro + TypeScript static site
 - Minimal client JavaScript for Project Fit and the qualified project review form
-- PHP endpoint for Cloudflare Turnstile verification and authenticated SMTP delivery on Hostinger
+- PHP endpoint for authenticated SMTP delivery on Hostinger with honeypot, server validation, and a PHP-native global throttle
 
 ## Local development
 
@@ -30,18 +30,19 @@ npm run preview
 ```bash
 npm test
 npm run test:php
+npm run test:apache
 npm run lint
 npm run check
 ```
 
 ## Runtime configuration
 
-Copy production SMTP and Turnstile secrets to `../hsd-private/project-review-config.php` outside the hosting document root (see `api/private-config.example.php` and [DEPLOYMENT.md](./DEPLOYMENT.md)).
+Copy production SMTP settings to `../hsd-private/project-review-config.php` outside the hosting document root (see `api/private-config.example.php` and [DEPLOYMENT.md](./DEPLOYMENT.md)).
 
 `npm run build` packages a document-root-ready `release/` artifact. Main-branch CI publishes verified runtime files to the `hostinger-deploy` branch.
 
-- `mail_mode=nosend` for local/test environments
-- `mail_mode=smtp` for production once Hostinger SMTP credentials and Turnstile secrets are configured
+- `mail_mode=nosend` for local/test environments via `HSD_TEST_CONFIG_PATH`
+- `mail_mode=smtp` for production once Hostinger SMTP credentials are configured in the private server config
 - Visitor email is sent in SMTP `Reply-To`, never authenticated `From`
 
 ## Deployment boundary

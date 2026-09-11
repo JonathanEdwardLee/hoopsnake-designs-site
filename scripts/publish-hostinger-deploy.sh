@@ -11,11 +11,6 @@ if [[ ! -f "$RELEASE/index.html" ]]; then
   exit 1
 fi
 
-if [[ -z "${HSD_TURNSTILE_SITE_KEY:-}" ]]; then
-  echo "HSD_TURNSTILE_SITE_KEY is required for production artifact publication." >&2
-  exit 1
-fi
-
 WORKTREE="$(mktemp -d)"
 trap 'rm -rf "$WORKTREE"' EXIT
 

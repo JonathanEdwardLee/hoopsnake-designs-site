@@ -24,5 +24,4 @@ return [
     'smtp_secure' => 'tls',
     'smtp_user' => '',
     'smtp_pass' => '',
-    'turnstile_secret' => '',
 ];

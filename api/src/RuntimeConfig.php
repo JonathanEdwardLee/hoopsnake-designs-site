@@ -28,7 +28,7 @@ final class RuntimeConfig
             ];
         }
 
-        $testConfigPath = getenv('HSD_TEST_CONFIG_PATH');
+        $testConfigPath = getenv('HSD_TEST_CONFIG_PATH') ?: ($_SERVER['HSD_TEST_CONFIG_PATH'] ?? '');
         if (is_string($testConfigPath) && $testConfigPath !== '' && is_readable($testConfigPath)) {
             $config = require $testConfigPath;
             if (!is_array($config)) {

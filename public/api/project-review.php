@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-use Hsd\Api\CurlHttpClient;
 use Hsd\Api\FormValidator;
+use Hsd\Api\GlobalSubmissionThrottle;
 use Hsd\Api\JsonResponse;
 use Hsd\Api\MailAdapterFactory;
 use Hsd\Api\ProjectReviewHandler;
 use Hsd\Api\RuntimeConfig;
-use Hsd\Api\TurnstileValidator;
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     JsonResponse::send(['ok' => false, 'code' => 'method_not_allowed'], 405);
@@ -44,7 +43,7 @@ if (!is_array($input)) {
 
 $mailMode = $config['mail_mode'] ?? 'nosend';
 if ($mailMode === 'smtp') {
-    $required = ['to_address', 'from_address', 'smtp_user', 'smtp_pass', 'turnstile_secret'];
+    $required = ['to_address', 'from_address', 'smtp_user', 'smtp_pass'];
     foreach ($required as $key) {
         if (empty($config[$key])) {
             JsonResponse::send([
@@ -56,25 +55,13 @@ if ($mailMode === 'smtp') {
     }
 }
 
-$turnstileSecret = (string) ($config['turnstile_secret'] ?? '');
-if ($mailMode === 'smtp') {
-    $turnstile = new TurnstileValidator($turnstileSecret, new CurlHttpClient());
-} else {
-    $secretForValidator = $turnstileSecret !== ''
-        ? $turnstileSecret
-        : '1x0000000000000000000000000000000AA';
-    $turnstile = new TurnstileValidator($secretForValidator, new CurlHttpClient());
-}
-
 $handler = new ProjectReviewHandler(
     new FormValidator(),
-    $turnstile,
     MailAdapterFactory::fromConfig($config),
-    requireTurnstile: $mailMode === 'smtp',
+    new GlobalSubmissionThrottle(GlobalSubmissionThrottle::storagePathForDocumentRoot($documentRoot)),
 );
 
-$remoteIp = $_SERVER['REMOTE_ADDR'] ?? null;
-$result = $handler->handle($input, is_string($remoteIp) ? $remoteIp : null);
+$result = $handler->handle($input);
 
 $status = match ($result['code']) {
     'received' => 200,

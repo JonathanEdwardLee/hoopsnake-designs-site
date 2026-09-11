@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro check && astro build && node scripts/package-release.mjs",
-    "build:production": "node scripts/build-production.mjs",
     "preview": "astro preview",
     "check": "astro check",
     "lint": "eslint .",
@@ -15,7 +14,7 @@
     "test:apache": "bash scripts/apache-integration-test.sh",
     "report:release": "node scripts/report-release-tree.mjs",
     "verify:release": "bash scripts/verify-release-artifact.sh",
-    "test:production-site-key": "bash scripts/verify-production-site-key-required.sh",
+    "verify:no-external-verification": "bash scripts/verify-no-cloudflare.sh",
     "capture:portfolio": "node scripts/capture-portfolio-images.mjs"
   },
   "devDependencies": {

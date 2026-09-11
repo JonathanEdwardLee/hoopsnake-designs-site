@@ -27,6 +27,7 @@ public_html/
 ../hsd-private/
   project-review-config.php
   project-review-throttle.json
+  project-review-throttle.json.lock
 ```
 
 Production secrets and throttle state live outside `public_html` under `../hsd-private/`, resolved relative to `DOCUMENT_ROOT`. See `api/private-config.example.php` for the SMTP config template.
@@ -86,7 +87,7 @@ PR CI builds and tests the artifact but does **not** update `hostinger-deploy`.
 
 V1 uses honeypot, strict server-side validation/length limits, and a PHP-native global throttle:
 
-- throttle file: `../hsd-private/project-review-throttle.json`
+- throttle state: `../hsd-private/project-review-throttle.json` (timestamps only) with sibling lock file for atomic updates
 - rolling window: 10 minutes
 - cap: 20 POST attempts
 - stores timestamps only; no visitor identifiers

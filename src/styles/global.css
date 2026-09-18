@@ -32,7 +32,7 @@ html { scroll-behavior: smooth; }
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  .mark-track { animation: none !important; }
+  .mark-track, .hero-mark { animation: none !important; }
 }
 body {
   margin: 0;
@@ -52,6 +52,17 @@ a:hover { color: var(--hsd-accent-strong); }
   padding: 0.75rem 1rem; background: var(--hsd-accent); color: var(--hsd-bg);
 }
 .skip-link:focus { top: 1rem; }
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 .site-shell { width: min(calc(100% - 1.5rem), 74rem); margin-inline: auto; }
 .site-header {
   display: flex; align-items: center; justify-content: space-between; gap: 1rem;
@@ -63,24 +74,19 @@ a:hover { color: var(--hsd-accent-strong); }
   text-decoration: none; min-width: 0;
 }
 .brand-lockup:hover { color: inherit; }
+.brand-lockup-img {
+  height: clamp(2.1rem, 4vw, 2.7rem);
+  width: auto;
+  max-width: min(18rem, 62vw);
+}
 .brand-mark, .footer-mark, .hero-mark, .hsd-mark { color: var(--hsd-fg); }
 .brand-mark { width: 2.4rem; height: 2.4rem; flex: none; }
-.brand-text { display: grid; gap: 0.1rem; min-width: 0; }
-.brand-lockup strong {
-  font-family: var(--font-display); font-size: clamp(1.15rem, 2vw, 1.55rem); font-weight: 600;
-  letter-spacing: -0.02em;
-}
-.brand-lockup span span, .brand-text span {
-  color: var(--hsd-fg-muted); font-family: var(--font-mono); font-size: 0.68rem;
-  letter-spacing: 0.08em; text-transform: uppercase;
-}
 .site-nav { display: flex; flex-wrap: wrap; gap: 0.35rem 0.9rem; }
 .site-nav a {
   font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.08em;
   text-decoration: none; text-transform: uppercase;
 }
 @media (max-width: 759px) {
-  .brand-text span { display: none; }
   .site-header { padding: 0.9rem 0; }
   .site-nav .nav-compact-hide:not(:focus-visible) {
     position: absolute;
@@ -141,17 +147,19 @@ a:hover { color: var(--hsd-accent-strong); }
   transform: perspective(900px) rotateX(var(--tilt-y, 0deg)) rotateY(var(--tilt-x, 0deg));
   transform-style: preserve-3d;
 }
-.hero-mark { width: 100%; height: 100%; }
-.mark-track {
-  transform-origin: 32px 32px;
-  animation: loop-spin 36s linear infinite;
+.hero-mark {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transform-origin: 50% 50%;
+  animation: loop-spin 56s linear infinite;
 }
 .mark-head, .mark-joint, .mark-eye {
   transform: translate(calc(var(--pointer-x) * 3px), calc(var(--pointer-y) * 3px));
 }
 @keyframes loop-spin { to { transform: rotate(360deg); } }
 
-.featured-stack { display: grid; gap: clamp(2.5rem, 6vw, 4.5rem); margin-top: 2.5rem; }
+.featured-stack { display: grid; gap: clamp(2.5rem, 6vw, 4.5rem); margin-top: 1.5rem; }
 .feature-piece {
   display: grid; gap: 1.5rem; align-items: start;
 }
@@ -189,7 +197,11 @@ a:hover { color: var(--hsd-accent-strong); }
   .feature-piece.layout-map .feature-visual { order: 2; }
   .feature-piece.layout-mono { grid-template-columns: 1fr; }
   .feature-piece.layout-mono .feature-visual img { aspect-ratio: 16 / 9; filter: grayscale(1); }
-  .feature-piece.layout-cassette .feature-visual img { object-position: center 12%; aspect-ratio: 16 / 9; }
+  .feature-piece.layout-cassette .orpheus-proof img {
+    aspect-ratio: 9 / 16;
+    object-fit: contain;
+    object-position: center;
+  }
 }
 
 .portfolio-mosaic {
@@ -215,16 +227,51 @@ a:hover { color: var(--hsd-accent-strong); }
   object-fit: cover;
   object-position: top;
 }
+.portfolio-entry.layout-directory .portfolio-visual img {
+  object-fit: contain;
+  object-position: center;
+  background: #e8dfd0;
+}
 .portfolio-body { display: grid; gap: 0.55rem; }
 .portfolio-entry.layout-playful {
   background: var(--hsd-bg-elevated);
   border: 1px dashed var(--hsd-line);
   padding: 1rem;
 }
+.feature-piece.layout-cassette .feature-visual {
+  background: #111;
+}
+.orpheus-proof {
+  display: grid;
+  gap: 0.65rem;
+  padding: 0.85rem;
+}
+.orpheus-proof__main {
+  width: min(100%, 22rem);
+  height: auto;
+  aspect-ratio: 9 / 16;
+  object-fit: contain;
+  margin-inline: auto;
+}
+.orpheus-proof__strip {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  max-width: 22rem;
+  margin-inline: auto;
+}
+.orpheus-proof__strip img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 9 / 16;
+  object-fit: contain;
+  background: #000;
+}
 .portfolio-entry.layout-playful .portfolio-visual img {
   object-fit: contain;
   background: #fff;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 4 / 5;
+  object-position: center;
 }
 .portfolio-entry.layout-mono .portfolio-visual img { filter: grayscale(1); }
 .portfolio-entry.layout-cassette { grid-column: 1 / -1; }

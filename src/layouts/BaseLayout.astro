@@ -30,6 +30,7 @@ const canonical = 'https://hoopsnakedesigns.com/';
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/images/brand/hoopsnake-favicon.png" type="image/png" sizes="192x192" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -42,14 +43,10 @@ const canonical = 'https://hoopsnakedesigns.com/';
     <div class="site-shell">
       <header class="site-header">
         <a class="brand-lockup" href="#main">
-          <HoopsnakeMark class="brand-mark" />
-          <span class="brand-text">
-            <strong>Hoopsnake Designs</strong>
-            <span>Websites, apps, and digital products</span>
-          </span>
+          <HoopsnakeMark class="brand-lockup-img" variant="lockup" labelled />
         </a>
         <nav class="site-nav" aria-label="Primary">
-          <a href="#portfolio">Portfolio</a>
+          <a href="#featured">Portfolio</a>
           <a class="nav-compact-hide" href="#what-i-build">What I Build</a>
           <a href="#about">About</a>
           <a class="nav-compact-hide" href="#working-together">Working Together</a>
@@ -62,14 +59,14 @@ const canonical = 'https://hoopsnakedesigns.com/';
       <footer class="site-footer">
         <div class="footer-grid">
           <div class="footer-identity">
-            <HoopsnakeMark class="footer-mark" />
+            <HoopsnakeMark class="footer-mark" variant="emblem" />
             <strong>Hoopsnake Designs</strong>
           </div>
           <p class="footer-note">
             Websites, apps, and digital products by Jonathan Edward Lee. Project inquiries go through the form on this page — no public mailbox is published here.
           </p>
           <div class="footer-links">
-            <a href="#portfolio">Portfolio</a>
+            <a href="#featured">Portfolio</a>
             <a href="#project-review">Start a Project</a>
             <a href="#boundaries">Scope & privacy</a>
           </div>

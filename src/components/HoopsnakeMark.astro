@@ -1,50 +1,34 @@
 ---
 interface Props {
   class?: string;
+  variant?: 'emblem' | 'lockup';
   labelled?: boolean;
 }
 
-const { class: className = 'hsd-mark', labelled = false } = Astro.props;
+const { class: className = 'hsd-mark', variant = 'emblem', labelled = false } = Astro.props;
+
+const assets = {
+  emblem: {
+    src: '/images/brand/hoopsnake-emblem.png',
+    width: 1254,
+    height: 1254,
+  },
+  lockup: {
+    src: '/images/brand/hoopsnake-lockup.png',
+    width: 2172,
+    height: 724,
+  },
+} as const;
+
+const asset = assets[variant];
 ---
 
-<svg
+<img
   class={className}
-  viewBox="0 0 64 64"
-  fill="none"
-  xmlns="http://www.w3.org/2000/svg"
-  role={labelled ? 'img' : 'presentation'}
-  aria-hidden={labelled ? undefined : 'true'}
->
-  {labelled && <title>Hoopsnake loop mark</title>}
-  <path
-    class="mark-track"
-    d="M50.2 18.6a22 22 0 1 1-6.4-3.8"
-    stroke="currentColor"
-    stroke-width="1.6"
-    stroke-linecap="round"
-  />
-  <path
-    class="mark-inner"
-    d="M44.8 22.4a14.5 14.5 0 1 1-4.2-2.5"
-    stroke="currentColor"
-    stroke-width="0.8"
-    stroke-dasharray="2.4 2.2"
-    opacity="0.55"
-  />
-  <path
-    class="mark-joint"
-    d="M46.8 14.2h6.4M50 11v6.6"
-    stroke="currentColor"
-    stroke-width="1.15"
-    stroke-linecap="square"
-  />
-  <path
-    class="mark-head"
-    d="M47.2 13.1 54.4 16.4 50.6 22.2"
-    stroke="currentColor"
-    stroke-width="1.6"
-    stroke-linejoin="miter"
-    stroke-linecap="square"
-  />
-  <circle class="mark-eye" cx="51.1" cy="16.7" r="1.05" fill="currentColor" />
-</svg>
+  src={asset.src}
+  width={asset.width}
+  height={asset.height}
+  alt={labelled ? 'Hoopsnake Designs' : ''}
+  decoding="async"
+  role={labelled ? undefined : 'presentation'}
+/>

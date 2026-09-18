@@ -34,7 +34,7 @@ describe('HSD-002 polish', () => {
     expect(portfolioItems).toHaveLength(6);
     expect(indexSource).toContain('<h2 id="portfolio-title" class="section-title">More Work</h2>');
     expect(indexSource).toContain('moreWork.map');
-    expect(layoutSource).toContain('href="#portfolio">Portfolio');
+    expect(layoutSource).toContain('href="#featured">Portfolio');
   });
 
   it('warms conversion copy without repeating acceptance denials or AI-chat governance', () => {

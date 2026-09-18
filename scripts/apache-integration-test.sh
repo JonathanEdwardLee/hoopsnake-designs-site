@@ -120,7 +120,9 @@ wait_for_server
 
 status="$(request GET /)"
 assert_status "GET /" 200 "$status"
-assert_body_contains "GET /" "Project Launch System"
+assert_body_contains "GET /" "I design and build distinctive websites, apps, and digital tools."
+assert_body_contains "GET /" "View Portfolio"
+assert_body_not_contains "GET /" "Project Launch System"
 
 css_asset="$(find "$RELEASE/_astro" -maxdepth 1 -type f -name '*.css' | head -1)"
 if [[ -z "$css_asset" ]]; then

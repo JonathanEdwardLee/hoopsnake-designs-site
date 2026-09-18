@@ -1,3 +1,5 @@
+export type PortfolioLayout = 'cassette' | 'map' | 'mono' | 'playful' | 'directory' | 'utility';
+
 export type PortfolioItem = {
   id: string;
   title: string;
@@ -8,82 +10,144 @@ export type PortfolioItem = {
   label: string;
   image: string;
   imageAlt: string;
+  featured: boolean;
+  layout: PortfolioLayout;
 };
 
 export const portfolioItems: PortfolioItem[] = [
   {
-    id: 'auto-detailing-guide',
-    title: 'Auto Detailing Guide',
-    relationship: 'Owned PIM project',
+    id: 'orpheus-deck',
+    title: 'Orpheus Deck',
+    relationship: 'Junkfeathers Tech Android product by Jonathan',
     description:
-      'Scalable directory, search, and data publishing architecture for detailer discovery across locations and services.',
-    href: 'https://autodetailingguide.com/',
-    accent: '#c8d4dc',
-    label: 'DIR / SEARCH / DATA',
-    image: '/images/portfolio/auto-detailing-guide.webp',
-    imageAlt: 'Auto Detailing Guide search interface showing detailer discovery layout',
-  },
-  {
-    id: 'can-i-borrow-this',
-    title: 'Can I Borrow This?',
-    relationship: 'Owned PIM project',
-    description:
-      'Guided consumer UX with location and source routing, privacy-minded product design, and clear decision paths.',
-    href: 'https://caniborrowthis.com/',
-    accent: '#d9cfc4',
-    label: 'GUIDED UX / ROUTING',
-    image: '/images/portfolio/can-i-borrow-this.webp',
-    imageAlt: 'Can I Borrow This guided consumer interface with routing choices',
+      'A public Android four-track recorder with a cassette-like interface, native audio, and a Google Play release.',
+    href: 'https://play.google.com/store/apps/details?id=com.junkfeathers.orpheusdeck',
+    accent: '#c9b8a4',
+    label: 'ANDROID / AUDIO',
+    image: '/images/portfolio/orpheus-deck.webp',
+    imageAlt: 'Orpheus Deck product page with cassette-style four-track recorder interface',
+    featured: true,
+    layout: 'cassette',
   },
   {
     id: 'ozarkskey',
     title: 'OzarksKey',
     relationship: 'Owned PIM project',
     description:
-      'Regional discovery with map, filter, and search UX, analytics discipline, and editorial/commercial separation.',
+      'Regional discovery with map, search, and source routing so people can find trusted local event calendars.',
     href: 'https://ozarkskey.com/',
-    accent: '#b8c9b0',
-    label: 'MAP / FILTER / DISCOVERY',
+    accent: '#c5cbb8',
+    label: 'MAP / SEARCH',
     image: '/images/portfolio/ozarkskey.webp',
-    imageAlt: 'OzarksKey regional discovery map and filter interface',
-  },
-  {
-    id: 'snorkleprawn',
-    title: 'SnorklePrawn',
-    relationship: 'Owned PIM project',
-    description:
-      'Character-led interactive web design with lightweight state, analytics, and commerce handoff.',
-    href: 'https://snorkleprawn.com/',
-    accent: '#f0c9a8',
-    label: 'INTERACTIVE / CHARACTER',
-    image: '/images/portfolio/snorkleprawn.webp',
-    imageAlt: 'SnorklePrawn character-led interactive web presentation',
+    imageAlt: 'OzarksKey source map with regional discovery and search interface',
+    featured: true,
+    layout: 'map',
   },
   {
     id: 'junkfeathers',
     title: 'Junkfeathers',
     relationship: 'Jonathan / Junkfeathers property',
     description:
-      'Art direction, music and technology presentation, machine-interface design, responsive static architecture, and interactive multimedia experimentation.',
+      'Music and technology presentation with a restrained machine-interface, static architecture, and interactive experiments.',
     href: 'https://junkfeathers.com/',
-    accent: '#e8e8e8',
-    label: 'ART DIRECTION / MACHINE UI',
+    accent: '#d8d4cc',
+    label: 'MACHINE UI',
     image: '/images/portfolio/junkfeathers.webp',
-    imageAlt: 'Junkfeathers machine-interface homepage with monochrome art direction',
+    imageAlt: 'Junkfeathers monochrome machine-interface homepage',
+    featured: true,
+    layout: 'mono',
   },
   {
-    id: 'orpheus-deck',
-    title: 'Orpheus Deck',
-    relationship: 'Junkfeathers Tech Android product by Jonathan',
+    id: 'auto-detailing-guide',
+    title: 'Auto Detailing Guide',
+    relationship: 'Owned PIM project',
     description:
-      'Shipped public Android product work: native audio, mobile interaction design, and Google Play release for a four-track recorder app.',
-    href: 'https://play.google.com/store/apps/details?id=com.junkfeathers.orpheusdeck',
-    accent: '#c4b8d9',
-    label: 'NATIVE AUDIO / ANDROID',
-    image: '/images/portfolio/orpheus-deck.webp',
-    imageAlt: 'Orpheus Deck public product page showing Android app presentation',
+      'A directory people can actually search: find detailers by location, service, and business name.',
+    href: 'https://autodetailingguide.com/',
+    accent: '#d3c7b4',
+    label: 'DIRECTORY / SEARCH',
+    image: '/images/portfolio/auto-detailing-guide.webp',
+    imageAlt: 'Auto Detailing Guide search interface for finding a detailer',
+    featured: false,
+    layout: 'directory',
+  },
+  {
+    id: 'can-i-borrow-this',
+    title: 'Can I Borrow This?',
+    relationship: 'Owned PIM project',
+    description:
+      'Guided routing that helps people check libraries and borrowing programs instead of buying first.',
+    href: 'https://caniborrowthis.com/',
+    accent: '#c9d2c4',
+    label: 'GUIDED UX',
+    image: '/images/portfolio/can-i-borrow-this.webp',
+    imageAlt: 'Can I Borrow This search form for item type and ZIP code',
+    featured: false,
+    layout: 'utility',
+  },
+  {
+    id: 'snorkleprawn',
+    title: 'SnorklePrawn',
+    relationship: 'Owned PIM project',
+    description:
+      'A character-led interactive page with lightweight state and a simple commerce handoff.',
+    href: 'https://snorkleprawn.com/',
+    accent: '#e4d3b4',
+    label: 'INTERACTIVE',
+    image: '/images/portfolio/snorkleprawn.webp',
+    imageAlt: 'SnorklePrawn character-led interactive web presentation',
+    featured: false,
+    layout: 'playful',
   },
 ];
+
+export const featuredPortfolio = portfolioItems.filter((item) => item.featured);
+
+export const capabilities = [
+  {
+    title: 'Websites',
+    copy: 'Custom one-page and small-site work with clear structure, mobile-first layout, and room for the project’s actual voice.',
+  },
+  {
+    title: 'Web apps',
+    copy: 'Focused product interfaces when the job, audience, and ownership are clear enough to build against.',
+  },
+  {
+    title: 'Mobile apps',
+    copy: 'Native and mobile-product work when a phone is the right place for the tool, not just a shrunk website.',
+  },
+  {
+    title: 'Interactive experiences',
+    copy: 'Character-led, game-like, or otherwise unusual pages that still have to load, read, and work.',
+  },
+  {
+    title: 'Custom tools / integrations',
+    copy: 'Bounded workflow tools, publishing systems, and one well-chosen integration instead of a pile of extras.',
+  },
+] as const;
+
+export const processStages = [
+  {
+    number: '01',
+    title: 'Review',
+    copy: 'Send the project form when you are ready. Jonathan reads it asynchronously and checks fit before any scheduling.',
+  },
+  {
+    number: '02',
+    title: 'Conversation',
+    copy: 'If the work looks aligned, a focused conversation clarifies goals, constraints, and who decides.',
+  },
+  {
+    number: '03',
+    title: 'Proposal',
+    copy: 'Scope, timeline, deliverables, and investment are written down before build begins. Acceptance is not assumed.',
+  },
+  {
+    number: '04',
+    title: 'Build + Launch',
+    copy: 'Implementation, review rounds, handoff, and launch. Larger apps and ongoing support stay on a separate scope.',
+  },
+] as const;
 
 export const projectTypes = [
   'Website / small site',

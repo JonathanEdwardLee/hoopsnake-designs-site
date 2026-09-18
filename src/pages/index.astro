@@ -1,10 +1,14 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import HoopsnakeMark from '@/components/HoopsnakeMark.astro';
 import {
   budgetBands,
+  capabilities,
+  featuredPortfolio,
   supportOptions,
   portfolioItems,
   primaryGoals,
+  processStages,
   projectTypes,
   timingOptions,
 } from '@/data/site';
@@ -13,110 +17,157 @@ import {
 <BaseLayout>
   <section class="section-block hero-grid" aria-labelledby="hero-title">
     <div class="hero-copy">
-      <p class="hero-price">Projects start at $3,500.</p>
-      <h1 id="hero-title">Project Launch System</h1>
+      <p class="eyebrow">Hoopsnake Designs · Jonathan Edward Lee</p>
+      <h1 id="hero-title">I design and build distinctive websites, apps, and digital tools.</h1>
       <p>
-        Premium custom website and qualified-lead system for small businesses, creators, and service operators who need more than a generic template — without hiring a large agency.
+        Custom work for businesses, creative projects, and people who want something better than a template. You work with Jonathan directly.
       </p>
       <div class="hero-actions">
-        <a class="button-primary" href="#project-review">Request a project review</a>
-        <a class="button-secondary" href="#selected-work">View selected work</a>
+        <a class="button-primary" href="#portfolio">View Portfolio</a>
+        <a class="button-secondary" href="#project-review">Start a Project</a>
       </div>
     </div>
     <div class="hero-device" aria-hidden="true">
       <div class="hoopsnake-loop" data-motion-loop>
         <div class="loop-interior">
-          <div class="loop-ring"></div>
-          <div class="loop-path">
-            <span class="loop-node"></span>
-            <span class="loop-node"></span>
-            <span class="loop-node"></span>
-            <span class="loop-node"></span>
-          </div>
-          <div class="loop-core">
-            <strong>Launch your dream project</strong>
-          </div>
+          <HoopsnakeMark class="hero-mark" />
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section-block" aria-labelledby="breadth-title">
-    <p class="section-label">Capability breadth</p>
-    <h2 id="breadth-title" class="section-title">Built for focused launches, with room for more.</h2>
+  <section class="section-block featured-block" id="featured" aria-labelledby="featured-title">
+    <p class="section-label">Featured</p>
+    <h2 id="featured-title" class="section-title">Recent work, shown at a scale you can actually judge.</h2>
     <p class="section-lead">
-      The Project Launch System is the starting point. Separately scoped work may include apps, interactive experiences, custom tools, optional AI integrations, and unusual technology.
+      These are real products and sites. Owned PIM and Junkfeathers projects demonstrate how Jonathan designs and builds; they are not independent paid-client case studies.
     </p>
-    <div class="breadth-grid" style="margin-top: 2rem;">
-      <article class="chip-card"><strong>Websites</strong><p>Custom one-page or small-site architecture with premium presentation.</p></article>
-      <article class="chip-card"><strong>Apps</strong><p>Bounded product work when scope, timeline, and ownership are clear.</p></article>
-      <article class="chip-card"><strong>Interactive</strong><p>Character-led, game-like, or experiential web interfaces.</p></article>
-      <article class="chip-card"><strong>Custom tools</strong><p>Workflow tools, integrations, and focused internal systems.</p></article>
-      <article class="chip-card"><strong>Optional AI</strong><p>Future server-side assistance only when lead volume justifies it — not in V1.</p></article>
-    </div>
-  </section>
 
-  <section class="section-block" id="selected-work" aria-labelledby="portfolio-title">
-    <p class="section-label">Selected work</p>
-    <h2 id="portfolio-title" class="section-title">Proof from owned builds and Jonathan's properties.</h2>
-    <p class="section-lead">
-      These examples show real design instincts across directories, guided UX, regional discovery, character-led interaction, machine-interface art direction, and native product work.
-    </p>
-    <div class="portfolio-grid" style="margin-top: 2rem;">
-      {portfolioItems.map((item) => (
-        <article class="portfolio-card">
-          <div class="portfolio-visual" style={`--accent: ${item.accent}`}>
-            <img src={item.image} alt={item.imageAlt} loading="lazy" decoding="async" width="640" height="400" />
-            <span>{item.label}</span>
+    <div class="featured-stack">
+      {featuredPortfolio.map((item, index) => (
+        <article class={`feature-piece layout-${item.layout}`}>
+          <div class="feature-visual">
+            <img
+              src={item.image}
+              alt={item.imageAlt}
+              width="1280"
+              height="720"
+              loading={index === 0 ? 'eager' : 'lazy'}
+              decoding="async"
+              fetchpriority={index === 0 ? 'high' : undefined}
+            />
           </div>
-          <div class="portfolio-body">
+          <div class="feature-copy">
             <p class="relationship-tag">{item.relationship}</p>
+            <p class="tech-label">{item.label}</p>
             <h3>{item.title}</h3>
             <p>{item.description}</p>
-            <a href={item.href} target="_blank" rel="noopener noreferrer">View public project ↗</a>
+            <a href={item.href} target="_blank" rel="noopener noreferrer">View public project</a>
           </div>
         </article>
       ))}
     </div>
   </section>
 
-  <section class="section-block" id="launch-system" aria-labelledby="launch-title">
-    <p class="section-label">Launch System first</p>
-    <h2 id="launch-title" class="section-title">What the Launch System includes — and what stays separate.</h2>
-    <div class="launch-stack" style="margin-top: 2rem;">
-      <article class="launch-card">
-        <strong>Standard Launch System scope</strong>
-        <ul>
-          <li>Custom one-page or small-site architecture appropriate to the project</li>
-          <li>Mobile-first responsive design with performance and accessibility in mind</li>
-          <li>Technical SEO and privacy foundation</li>
-          <li>Qualified project-review form</li>
-          <li>One bounded integration</li>
-          <li>Two consolidated revision rounds</li>
-          <li>Explicit handoff documentation</li>
-          <li>Proposed 14-day launch-defect correction window</li>
-        </ul>
-      </article>
-      <article class="launch-card">
-        <strong>Separate scopes</strong>
-        <ul>
-          <li>Larger apps, games, commerce platforms, or backends</li>
-          <li>Ongoing marketing retainers or open-ended support</li>
-          <li>Public AI chat or visitor-content processing</li>
-          <li>Payment processing or recurring platform expansion</li>
-        </ul>
-        <p style="margin-top: 1rem;">Payment milestones are discussed in proposals — not published here as binding policy.</p>
-      </article>
+  <section class="section-block" id="portfolio" aria-labelledby="portfolio-title">
+    <span id="selected-work"></span>
+    <p class="section-label">Portfolio</p>
+    <h2 id="portfolio-title" class="section-title">Portfolio</h2>
+    <p class="section-lead">
+      Directories, guided tools, maps, interactive characters, machine interfaces, and a shipped Android recorder — different problems, same author.
+    </p>
+    <div class="portfolio-mosaic">
+      {portfolioItems.map((item) => (
+        <article class={`portfolio-entry layout-${item.layout}`}>
+          <div class="portfolio-visual">
+            <img src={item.image} alt={item.imageAlt} loading="lazy" decoding="async" width="640" height="400" />
+          </div>
+          <div class="portfolio-body">
+            <p class="relationship-tag">{item.relationship}</p>
+            <p class="tech-label">{item.label}</p>
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+            <a href={item.href} target="_blank" rel="noopener noreferrer">View public project</a>
+          </div>
+        </article>
+      ))}
     </div>
   </section>
 
-  <section class="section-block machine-panel" id="project-fit" aria-labelledby="fit-title" data-project-fit>
+  <section class="section-block" id="what-i-build" aria-labelledby="build-title">
+    <p class="section-label">What I Build</p>
+    <h2 id="build-title" class="section-title">Websites, apps, and tools with a clear job.</h2>
+    <p class="section-lead">
+      The work stays specific. If a project needs something larger than a focused build, that gets its own conversation and proposal.
+    </p>
+    <div class="capability-list">
+      {capabilities.map((item) => (
+        <article class="capability-row">
+          <h3>{item.title}</h3>
+          <p>{item.copy}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section-block" id="about" aria-labelledby="about-title">
+    <p class="section-label">About</p>
+    <div class="about-grid">
+      <h2 id="about-title" class="section-title">You work with Jonathan.</h2>
+      <div class="about-copy">
+        <p>
+          Hoopsnake Designs is Jonathan Edward Lee’s design and development studio. He designs and builds websites, apps, and digital tools for businesses, creative projects, and people who want authored work instead of a template.
+        </p>
+        <p>
+          There is no account team in between. Inquiries are read by Jonathan. Fit is checked before a call is scheduled, and a proposal is written before build starts.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-block" id="how-we-work" aria-labelledby="process-title">
+    <p class="section-label">How We'll Work Together</p>
+    <h2 id="process-title" class="section-title">Review. Conversation. Proposal. Build.</h2>
+    <ol class="process-list">
+      {processStages.map((stage) => (
+        <li class="process-step">
+          <span class="tech-label">{stage.number}</span>
+          <strong>{stage.title}</strong>
+          <p>{stage.copy}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="section-block" id="working-together" aria-labelledby="working-title">
+    <span id="launch-system"></span>
+    <p class="section-label">Working Together</p>
+    <h2 id="working-title" class="section-title">A clear starting point, then a written proposal.</h2>
+    <div class="working-grid">
+      <div>
+        <p class="section-lead">
+          Custom websites and focused product work typically start at $3,500. That figure is a quote floor, not a packaged price list. Larger apps, custom systems, and ongoing support are scoped separately after review.
+        </p>
+        <p class="section-lead" style="margin-top: 1.25rem;">
+          Payment details, timeline, and deliverables live in the proposal — not as pressure on this page.
+        </p>
+      </div>
+      <div class="working-notes" id="boundaries">
+        <p><strong>Not a template install.</strong> The page is meant to show the work itself.</p>
+        <p><strong>No public AI chat.</strong> Visitor project content is not sent to an AI provider.</p>
+        <p><strong>Privacy for inquiries.</strong> Use the form for project inquiries only. Do not submit credentials, payment information, or unnecessary sensitive data.</p>
+        <p><strong>After launch.</strong> One-time launch is the default. Ongoing support requires a separate scope.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-block" id="project-fit" aria-labelledby="fit-title" data-project-fit>
     <p class="section-label">Project Fit</p>
     <h2 id="fit-title" class="section-title">Check fit before you write the full brief.</h2>
     <p class="section-lead">
       This quick check helps prefill the review form. It does not generate a binding quote or promise acceptance.
     </p>
-    <form class="fit-shell" data-fit-form style="margin-top: 2rem;">
+    <form class="fit-shell" data-fit-form>
       <div class="fit-steps">
         <div class="fit-field">
           <label for="fit_project_type">Project type</label>
@@ -155,58 +206,14 @@ import {
     </form>
   </section>
 
-  <section class="section-block" aria-labelledby="process-title">
-    <p class="section-label">Process</p>
-    <h2 id="process-title" class="section-title">Review first. Call only if qualified.</h2>
-    <div class="process-grid" style="margin-top: 2rem;">
-      <article class="process-step"><strong>01 · Review</strong><p>Submit the project review form asynchronously. Jonathan reviews fit before any scheduling.</p></article>
-      <article class="process-step"><strong>02 · Scoped call</strong><p>If the project appears aligned, a focused call clarifies goals, constraints, and decision path.</p></article>
-      <article class="process-step"><strong>03 · Proposal</strong><p>Scope, timeline, deliverables, and investment are documented clearly before build begins.</p></article>
-      <article class="process-step"><strong>04 · Build + staging</strong><p>Mobile-first implementation with performance, accessibility, and technical SEO foundations.</p></article>
-      <article class="process-step"><strong>05 · Two revisions</strong><p>Two consolidated revision rounds keep the launch focused and bounded.</p></article>
-      <article class="process-step"><strong>06 · Handoff + launch</strong><p>Explicit handoff, launch support, and a proposed 14-day launch-defect correction window.</p></article>
-    </div>
-  </section>
-
-  <section class="section-block" id="boundaries" aria-labelledby="faq-title">
-    <p class="section-label">Boundaries / FAQ</p>
-    <h2 id="faq-title" class="section-title">Clear scope beats vague promises.</h2>
-    <div class="faq-grid" style="margin-top: 2rem;">
-      <article class="faq-item">
-        <strong>Is this a template install?</strong>
-        <p>No. The page itself is meant to prove design ability — authored, premium, and memorable rather than generic agency filler.</p>
-      </article>
-      <article class="faq-item">
-        <strong>Do you publish payment milestones here?</strong>
-        <p>No. Larger apps, commerce, backends, ongoing marketing, and open-ended support are scoped separately in proposals.</p>
-      </article>
-      <article class="faq-item">
-        <strong>What about AI chat?</strong>
-        <p>V1 does not include public AI chat or send visitor project content to any AI provider.</p>
-      </article>
-      <article class="faq-item">
-        <strong>What happens after I submit?</strong>
-        <p>Submission received means the inquiry is in review. Jonathan evaluates fit before scheduling a call and does not promise acceptance.</p>
-      </article>
-      <article class="faq-item">
-        <strong>Privacy for inquiries</strong>
-        <p>The form is for project inquiries only. Do not submit credentials, payment information, or unnecessary sensitive data.</p>
-      </article>
-      <article class="faq-item">
-        <strong>Support after launch</strong>
-        <p>One-time launch is the default. Ongoing support, marketing, or platform expansion requires a separate scope.</p>
-      </article>
-    </div>
-  </section>
-
-  <section class="section-block machine-panel" id="project-review" aria-labelledby="review-title" data-review-root>
-    <p class="section-label">Qualified Project Review</p>
-    <h2 id="review-title" class="section-title">Request a project review</h2>
+  <section class="section-block" id="project-review" aria-labelledby="review-title" data-review-root>
+    <p class="section-label">Start a Project</p>
+    <h2 id="review-title" class="section-title">Tell me about your project</h2>
     <p class="section-lead">
       Share the essentials below. Jonathan reviews fit before scheduling a call and does not promise acceptance.
     </p>
 
-    <form class="form-grid two-col" data-review-form style="margin-top: 2rem;" novalidate>
+    <form class="form-grid two-col" data-review-form novalidate>
       <div class="form-field">
         <label for="name">Name</label>
         <input id="name" name="name" type="text" autocomplete="name" required maxlength="120" />

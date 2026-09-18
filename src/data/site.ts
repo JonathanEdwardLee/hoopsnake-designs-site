@@ -18,7 +18,7 @@ export const portfolioItems: PortfolioItem[] = [
   {
     id: 'orpheus-deck',
     title: 'Orpheus Deck',
-    relationship: 'Junkfeathers Tech Android product by Jonathan',
+    relationship: 'Android app by Jonathan Edward Lee',
     description:
       'A public Android four-track recorder with a cassette-like interface, native audio, and a Google Play release.',
     href: 'https://play.google.com/store/apps/details?id=com.junkfeathers.orpheusdeck',
@@ -32,7 +32,7 @@ export const portfolioItems: PortfolioItem[] = [
   {
     id: 'ozarkskey',
     title: 'OzarksKey',
-    relationship: 'Owned PIM project',
+    relationship: 'Independent project by Jonathan',
     description:
       'Regional discovery with map, search, and source routing so people can find trusted local event calendars.',
     href: 'https://ozarkskey.com/',
@@ -46,7 +46,7 @@ export const portfolioItems: PortfolioItem[] = [
   {
     id: 'junkfeathers',
     title: 'Junkfeathers',
-    relationship: 'Jonathan / Junkfeathers property',
+    relationship: 'Product designed and built by Jonathan',
     description:
       'Music and technology presentation with a restrained machine-interface, static architecture, and interactive experiments.',
     href: 'https://junkfeathers.com/',
@@ -60,7 +60,7 @@ export const portfolioItems: PortfolioItem[] = [
   {
     id: 'auto-detailing-guide',
     title: 'Auto Detailing Guide',
-    relationship: 'Owned PIM project',
+    relationship: 'Independent project by Jonathan',
     description:
       'A directory people can actually search: find detailers by location, service, and business name.',
     href: 'https://autodetailingguide.com/',
@@ -74,7 +74,7 @@ export const portfolioItems: PortfolioItem[] = [
   {
     id: 'can-i-borrow-this',
     title: 'Can I Borrow This?',
-    relationship: 'Owned PIM project',
+    relationship: 'Independent project by Jonathan',
     description:
       'Guided routing that helps people check libraries and borrowing programs instead of buying first.',
     href: 'https://caniborrowthis.com/',
@@ -88,7 +88,7 @@ export const portfolioItems: PortfolioItem[] = [
   {
     id: 'snorkleprawn',
     title: 'SnorklePrawn',
-    relationship: 'Owned PIM project',
+    relationship: 'Independent project by Jonathan',
     description:
       'A character-led interactive page with lightweight state and a simple commerce handoff.',
     href: 'https://snorkleprawn.com/',
@@ -102,6 +102,7 @@ export const portfolioItems: PortfolioItem[] = [
 ];
 
 export const featuredPortfolio = portfolioItems.filter((item) => item.featured);
+export const moreWork = portfolioItems.filter((item) => !item.featured);
 
 export const capabilities = [
   {
@@ -130,17 +131,17 @@ export const processStages = [
   {
     number: '01',
     title: 'Review',
-    copy: 'Send the project form when you are ready. Jonathan reads it asynchronously and checks fit before any scheduling.',
+    copy: 'Send the project form when you are ready. Jonathan reads it and replies about next steps.',
   },
   {
     number: '02',
     title: 'Conversation',
-    copy: 'If the work looks aligned, a focused conversation clarifies goals, constraints, and who decides.',
+    copy: 'If the work looks like a good fit, a focused conversation clarifies goals, constraints, and who decides.',
   },
   {
     number: '03',
     title: 'Proposal',
-    copy: 'Scope, timeline, deliverables, and investment are written down before build begins. Acceptance is not assumed.',
+    copy: 'Scope, timeline, deliverables, and investment are written down before build begins.',
   },
   {
     number: '04',

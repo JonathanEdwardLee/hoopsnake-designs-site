@@ -55,7 +55,7 @@ describe('HSD-001 brand and portfolio rebuild', () => {
     expect(indexSource.indexOf('id="featured"')).toBeLessThan(indexSource.indexOf('id="portfolio"'));
     expect(indexSource.indexOf('id="portfolio"')).toBeLessThan(indexSource.indexOf('id="working-together"'));
     expect(indexSource).toContain('id="portfolio-title"');
-    expect(indexSource).toMatch(/<h2 id="portfolio-title"[^>]*>Portfolio<\/h2>/);
+    expect(indexSource).toMatch(/<h2 id="portfolio-title"[^>]*>More Work<\/h2>/);
     expect(layoutSource).toContain('href="#portfolio">Portfolio');
     expect(indexSource).toContain('$3,500');
     expect(indexSource.indexOf('$3,500')).toBeGreaterThan(indexSource.indexOf('id="working-together"'));
@@ -73,10 +73,12 @@ describe('HSD-001 brand and portfolio rebuild', () => {
       expect(siteSource).toContain(title);
     }
     expect(indexSource).toContain('featuredPortfolio.map');
-    expect(indexSource).toContain('portfolioItems.map');
-    expect(siteSource).toContain('Owned PIM project');
-    expect(siteSource).toContain('Jonathan / Junkfeathers property');
-    expect(siteSource).toContain('Junkfeathers Tech Android product by Jonathan');
+    expect(indexSource).toContain('moreWork.map');
+    expect(siteSource).toContain('Independent project by Jonathan');
+    expect(siteSource).toContain('Product designed and built by Jonathan');
+    expect(siteSource).toContain('Android app by Jonathan Edward Lee');
+    expect(siteSource).not.toContain('Owned PIM project');
+    expect(siteSource).not.toContain('Jonathan / Junkfeathers property');
   });
 
   it('removes internal launch-system framing from public copy', () => {
@@ -98,9 +100,9 @@ describe('HSD-001 brand and portfolio rebuild', () => {
   });
 
   it('names Jonathan as the human reviewer and keeps form success copy', () => {
-    expect(siteSource).toContain('Jonathan reads it asynchronously');
-    expect(indexSource).toContain('Jonathan reviews fit before scheduling a call');
-    expect(formSource).toContain('Jonathan reviews fit before scheduling a call.');
+    expect(siteSource).toContain('Jonathan reads it and replies about next steps.');
+    expect(indexSource).toContain('If the project looks like a good fit, Jonathan will follow up to schedule a conversation.');
+    expect(formSource).toContain('If the project looks like a good fit, Jonathan will follow up to schedule a conversation.');
     expect(indexSource).not.toMatch(/Hoopsnake reviews/i);
     expect(indexSource).not.toMatch(/Hoopsnake evaluates/i);
     expect(layoutSource).toContain('Hoopsnake Designs');

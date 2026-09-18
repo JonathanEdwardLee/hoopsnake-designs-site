@@ -1,0 +1,50 @@
+---
+interface Props {
+  class?: string;
+  labelled?: boolean;
+}
+
+const { class: className = 'hsd-mark', labelled = false } = Astro.props;
+---
+
+<svg
+  class={className}
+  viewBox="0 0 64 64"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  role={labelled ? 'img' : 'presentation'}
+  aria-hidden={labelled ? undefined : 'true'}
+>
+  {labelled && <title>Hoopsnake loop mark</title>}
+  <path
+    class="mark-track"
+    d="M50.2 18.6a22 22 0 1 1-6.4-3.8"
+    stroke="currentColor"
+    stroke-width="1.6"
+    stroke-linecap="round"
+  />
+  <path
+    class="mark-inner"
+    d="M44.8 22.4a14.5 14.5 0 1 1-4.2-2.5"
+    stroke="currentColor"
+    stroke-width="0.8"
+    stroke-dasharray="2.4 2.2"
+    opacity="0.55"
+  />
+  <path
+    class="mark-joint"
+    d="M46.8 14.2h6.4M50 11v6.6"
+    stroke="currentColor"
+    stroke-width="1.15"
+    stroke-linecap="square"
+  />
+  <path
+    class="mark-head"
+    d="M47.2 13.1 54.4 16.4 50.6 22.2"
+    stroke="currentColor"
+    stroke-width="1.6"
+    stroke-linejoin="miter"
+    stroke-linecap="square"
+  />
+  <circle class="mark-eye" cx="51.1" cy="16.7" r="1.05" fill="currentColor" />
+</svg>

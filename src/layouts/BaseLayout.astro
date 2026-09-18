@@ -1,12 +1,14 @@
 ---
+import HoopsnakeMark from '@/components/HoopsnakeMark.astro';
+
 interface Props {
   title?: string;
   description?: string;
 }
 
 const {
-  title = 'Hoopsnake Designs — Premium custom websites and qualified-lead systems',
-  description = 'Project Launch System: premium custom website and qualified-lead system for small businesses, creators, and service operators. Projects start at $3,500.',
+  title = 'Hoopsnake Designs — Websites, apps, and digital products by Jonathan Edward Lee',
+  description = 'Hoopsnake Designs is Jonathan Edward Lee’s studio for distinctive websites, apps, and digital tools. Custom work for businesses, creative projects, and people who want something better than a template.',
 } = Astro.props;
 
 const canonical = 'https://hoopsnakedesigns.com/';
@@ -28,20 +30,30 @@ const canonical = 'https://hoopsnakedesigns.com/';
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to main content</a>
     <div class="site-shell">
       <header class="site-header">
-        <div class="brand-lockup">
-          <strong>Hoopsnake Designs</strong>
-          <span>Premium launch systems</span>
-        </div>
+        <a class="brand-lockup" href="#main">
+          <HoopsnakeMark class="brand-mark" />
+          <span class="brand-text">
+            <strong>Hoopsnake Designs</strong>
+            <span>Websites, apps, and digital products</span>
+          </span>
+        </a>
         <nav class="site-nav" aria-label="Primary">
-          <a href="#selected-work">Selected Work</a>
-          <a href="#launch-system">Launch System</a>
-          <a href="#project-fit">Project Fit</a>
-          <a href="#project-review">Project Review</a>
+          <a href="#portfolio">Portfolio</a>
+          <a href="#what-i-build">What I Build</a>
+          <a href="#about">About</a>
+          <a href="#working-together">Working Together</a>
+          <a href="#project-review">Start a Project</a>
         </nav>
       </header>
       <main id="main">
@@ -49,15 +61,19 @@ const canonical = 'https://hoopsnakedesigns.com/';
       </main>
       <footer class="site-footer">
         <div class="footer-grid">
-          <strong>Hoopsnake Designs</strong>
+          <div class="footer-identity">
+            <HoopsnakeMark class="footer-mark" />
+            <strong>Hoopsnake Designs</strong>
+          </div>
           <p class="footer-note">
-            Premium custom websites and qualified-lead systems by Jonathan Edward Lee. Project inquiries are reviewed asynchronously through the form above — no public mailbox is published here.
+            Websites, apps, and digital products by Jonathan Edward Lee. Project inquiries go through the form on this page — no public mailbox is published here.
           </p>
           <div class="footer-links">
-            <a href="#project-review">Request a project review</a>
+            <a href="#portfolio">Portfolio</a>
+            <a href="#project-review">Start a Project</a>
             <a href="#boundaries">Scope & privacy</a>
           </div>
-          <p class="footer-note">© {new Date().getFullYear()} Hoopsnake Designs. Springfield, Missouri.</p>
+          <p class="footer-note">© {new Date().getFullYear()} Hoopsnake Designs.</p>
         </div>
       </footer>
     </div>

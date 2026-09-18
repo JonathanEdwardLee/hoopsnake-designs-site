@@ -2,11 +2,11 @@ import type { ProjectFitAnswers, ProjectFitResult } from '@/data/site';
 
 const fitNotes: Record<string, string> = {
   'Below $3,500':
-    'Launch System projects start at $3,500. Share your goals anyway — smaller scoped work may still be possible, or we can clarify boundaries early.',
+    'Custom website and product work typically starts at $3,500. Share your goals anyway — smaller scoped work may still be possible, or we can clarify boundaries early.',
   '$3,500 – $7,500':
-    'This band aligns with the Project Launch System and focused custom work.',
+    'This band aligns with a focused custom website or a tightly bounded product build.',
   '$7,500 – $15,000':
-    'This range can support a richer Launch System build or a separately scoped app/tool engagement.',
+    'This range can support a richer site, a more involved product, or a separately scoped app or tool.',
   '$15,000+':
     'Larger builds, apps, and multi-phase work are scoped separately after review.',
   'Not sure yet':

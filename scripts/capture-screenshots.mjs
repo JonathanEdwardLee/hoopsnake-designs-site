@@ -18,7 +18,7 @@ const run = async () => {
   await shot(page, 'desktop_1440_hero.png', 1440, 900);
   await shot(page, 'mobile_390_hero.png', 390, 844);
   await shot(page, 'mobile_390_portfolio.png', 390, 844, async () => {
-    await page.locator('#selected-work').scrollIntoViewIfNeeded();
+    await page.locator('#portfolio').scrollIntoViewIfNeeded();
   });
   await shot(page, 'mobile_390_project_fit.png', 390, 844, async () => {
     await page.locator('#project-fit').scrollIntoViewIfNeeded();

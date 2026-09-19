@@ -9,7 +9,6 @@ const read = (relativePath: string) => readFileSync(resolve(root, relativePath),
 describe('HSD-002 polish', () => {
   const indexSource = read('src/pages/index.astro');
   const layoutSource = read('src/layouts/BaseLayout.astro');
-  const globalCss = read('src/styles/global.css');
   const siteSource = read('src/data/site.ts');
   const publicCopy = `${indexSource}\n${layoutSource}\n${siteSource}`;
 
@@ -32,9 +31,9 @@ describe('HSD-002 polish', () => {
     ]);
     expect(moreWork.every((item) => !featuredPortfolio.some((featured) => featured.id === item.id))).toBe(true);
     expect(portfolioItems).toHaveLength(6);
-    expect(indexSource).toContain('<h2 id="portfolio-title" class="section-title">More Work</h2>');
+    expect(indexSource).toContain('<h2 id="more-work-title" class="section-title">More Work</h2>');
     expect(indexSource).toContain('moreWork.map');
-    expect(layoutSource).toContain('href="#featured">Portfolio');
+    expect(layoutSource).toContain('href="#portfolio">Portfolio');
   });
 
   it('warms conversion copy without repeating acceptance denials or AI-chat governance', () => {
@@ -44,11 +43,12 @@ describe('HSD-002 polish', () => {
     expect(indexSource).not.toContain('No public AI chat');
   });
 
-  it('simplifies mobile navigation without removing desktop or keyboard links', () => {
-    expect(layoutSource).toContain('href="#what-i-build">What I Build');
-    expect(layoutSource).toContain('href="#working-together">Working Together');
-    expect(layoutSource).toContain('class="nav-compact-hide"');
-    expect(globalCss).toContain('.site-nav .nav-compact-hide:not(:focus-visible)');
-    expect(globalCss).toContain('clip: rect(0, 0, 0, 0)');
+  it('uses the same three header links on every viewport', () => {
+    expect(layoutSource).toContain('href="#portfolio">Portfolio');
+    expect(layoutSource).toContain('href="#about">About');
+    expect(layoutSource).toContain('href="#project-review">Start a Project');
+    expect(layoutSource).not.toContain('What I Build');
+    expect(layoutSource).not.toContain('Working Together');
+    expect(layoutSource).not.toContain('nav-compact-hide');
   });
 });

@@ -12,11 +12,19 @@ const {
 } = Astro.props;
 
 const canonical = 'https://hoopsnakedesigns.com/';
+const gaMeasurementId = 'G-X45GW26X65';
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
+    <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-X45GW26X65');
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
@@ -29,8 +37,9 @@ const canonical = 'https://hoopsnakedesigns.com/';
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="icon" href="/images/brand/hoopsnake-favicon.png" type="image/png" sizes="192x192" />
+    <link rel="icon" href="/images/brand/hoopsnake-icon-32-v004.png" type="image/png" sizes="32x32" />
+    <link rel="icon" href="/images/brand/hoopsnake-icon-192-v004.png" type="image/png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/images/brand/hoopsnake-apple-touch-180-v004.png" sizes="180x180" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -46,10 +55,8 @@ const canonical = 'https://hoopsnakedesigns.com/';
           <HoopsnakeMark class="brand-lockup-img" variant="lockup" labelled />
         </a>
         <nav class="site-nav" aria-label="Primary">
-          <a href="#featured">Portfolio</a>
-          <a class="nav-compact-hide" href="#what-i-build">What I Build</a>
+          <a href="#portfolio">Portfolio</a>
           <a href="#about">About</a>
-          <a class="nav-compact-hide" href="#working-together">Working Together</a>
           <a href="#project-review">Start a Project</a>
         </nav>
       </header>
@@ -66,7 +73,7 @@ const canonical = 'https://hoopsnakedesigns.com/';
             Websites, apps, and digital products by Jonathan Edward Lee. Project inquiries go through the form on this page — no public mailbox is published here.
           </p>
           <div class="footer-links">
-            <a href="#featured">Portfolio</a>
+            <a href="#portfolio">Portfolio</a>
             <a href="#project-review">Start a Project</a>
             <a href="#boundaries">Scope & privacy</a>
           </div>

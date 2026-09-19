@@ -45,18 +45,18 @@ describe('HSD-001 brand and portfolio rebuild', () => {
 
   it('answers who, what, and next action in the hero without a price', () => {
     expect(heroChunk).toContain('I design and build distinctive websites, apps, and digital tools.');
-    expect(heroChunk).toContain('View Portfolio');
     expect(heroChunk).toContain('Start a Project');
+    expect(heroChunk).not.toContain('View Portfolio');
     expect(heroChunk).not.toMatch(/\$3,500/);
     expect(heroChunk).not.toMatch(/price/i);
   });
 
   it('places portfolio proof before working-together pricing', () => {
-    expect(indexSource.indexOf('id="featured"')).toBeLessThan(indexSource.indexOf('id="portfolio"'));
-    expect(indexSource.indexOf('id="portfolio"')).toBeLessThan(indexSource.indexOf('id="working-together"'));
+    expect(indexSource.indexOf('id="portfolio"')).toBeLessThan(indexSource.indexOf('id="more-work"'));
+    expect(indexSource.indexOf('id="more-work"')).toBeLessThan(indexSource.indexOf('id="working-together"'));
     expect(indexSource).toContain('id="portfolio-title"');
-    expect(indexSource).toMatch(/<h2 id="portfolio-title"[^>]*>More Work<\/h2>/);
-    expect(layoutSource).toContain('href="#featured">Portfolio');
+    expect(indexSource).toMatch(/<h2 id="more-work-title"[^>]*>More Work<\/h2>/);
+    expect(layoutSource).toContain('href="#portfolio">Portfolio');
     expect(indexSource).toContain('$3,500');
     expect(indexSource.indexOf('$3,500')).toBeGreaterThan(indexSource.indexOf('id="working-together"'));
   });
@@ -92,11 +92,11 @@ describe('HSD-001 brand and portfolio rebuild', () => {
 
   it('keeps the hoopsnake loop motion with reduced-motion support', () => {
     expect(indexSource).toContain('data-motion-loop');
-    expect(motionSource).toContain("addEventListener('pointermove'");
-    expect(motionSource).toContain("addEventListener('pointerleave'");
+    expect(motionSource).toContain('setPointerCapture');
     expect(motionSource).toContain('prefers-reduced-motion: reduce');
     expect(motionSource).not.toContain('preventDefault');
     expect(globalCss).toContain('touch-action: pan-y');
+    expect(globalCss).toContain('animation: loop-spin 56s linear infinite');
   });
 
   it('names Jonathan as the human reviewer and keeps form success copy', () => {

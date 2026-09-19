@@ -16,6 +16,9 @@ public_html/
   _astro/
   images/
   favicon.svg
+  images/brand/hoopsnake-icon-32-v004.png
+  images/brand/hoopsnake-icon-192-v004.png
+  images/brand/hoopsnake-apple-touch-180-v004.png
   robots.txt
   sitemap.xml
   .htaccess

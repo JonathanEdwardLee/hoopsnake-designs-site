@@ -24,7 +24,7 @@ export const portfolioItems: PortfolioItem[] = [
     href: 'https://play.google.com/store/apps/details?id=com.junkfeathers.orpheusdeck',
     accent: '#c9b8a4',
     label: 'ANDROID / AUDIO',
-    image: '/images/portfolio/orpheus-deck.webp',
+    image: '/images/portfolio/orpheus-play-main.webp',
     imageAlt: 'Orpheus Deck main four-track recorder interface from the current Android app',
     featured: true,
     layout: 'cassette',

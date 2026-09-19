@@ -23,32 +23,38 @@ import {
         Custom work for businesses, creative projects, and people who want something better than a template. You work with Jonathan directly.
       </p>
       <div class="hero-actions">
-        <a class="button-primary" href="#featured">View Portfolio</a>
-        <a class="button-secondary" href="#project-review">Start a Project</a>
+        <a class="button-primary" href="#project-review">Start a Project</a>
       </div>
     </div>
     <div class="hero-device" aria-hidden="true">
       <div class="hoopsnake-loop" data-motion-loop>
         <div class="loop-interior">
-          <HoopsnakeMark class="hero-mark" />
+          <div class="hero-mark-user">
+            <HoopsnakeMark class="hero-mark" />
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section-block featured-block" id="featured" aria-labelledby="featured-title">
-    <p class="section-label">Featured</p>
-    <h2 id="featured-title" class="visually-hidden">Featured work</h2>
+  <span id="featured"></span>
+  <section class="section-block featured-block" id="portfolio" aria-labelledby="portfolio-title">
+    <p class="section-label">Portfolio</p>
+    <h2 id="portfolio-title" class="visually-hidden">Portfolio</h2>
 
     <div class="featured-stack">
       {featuredPortfolio.map((item, index) => (
-        <article class={`feature-piece layout-${item.layout}`}>
+        <article
+          class={`feature-piece layout-${item.layout}`}
+          data-reveal
+          data-reveal-dir={index % 2 === 0 ? 'left' : 'right'}
+        >
           <div class="feature-visual">
             {item.id === 'orpheus-deck' ? (
               <div class="orpheus-proof">
                 <img
                   class="orpheus-proof__main"
-                  src={item.image}
+                  src="/images/portfolio/orpheus-play-main.webp"
                   alt={item.imageAlt}
                   width="1080"
                   height="1920"
@@ -58,7 +64,7 @@ import {
                 />
                 <div class="orpheus-proof__strip">
                   <img
-                    src="/images/portfolio/orpheus-deck-recording.webp"
+                    src="/images/portfolio/orpheus-play-recording.webp"
                     alt="Orpheus Deck recording and overdub state"
                     width="720"
                     height="1280"
@@ -66,7 +72,7 @@ import {
                     decoding="async"
                   />
                   <img
-                    src="/images/portfolio/orpheus-deck-chronos.webp"
+                    src="/images/portfolio/orpheus-play-chronos.webp"
                     alt="Orpheus Deck Chronos metronome overlay"
                     width="720"
                     height="1280"
@@ -77,6 +83,7 @@ import {
               </div>
             ) : (
               <img
+                class="reveal-image"
                 src={item.image}
                 alt={item.imageAlt}
                 width="1280"
@@ -98,16 +105,16 @@ import {
     </div>
   </section>
 
-  <section class="section-block" id="portfolio" aria-labelledby="portfolio-title">
+  <section class="section-block" id="more-work" aria-labelledby="more-work-title">
     <span id="selected-work"></span>
     <p class="section-label">Portfolio</p>
-    <h2 id="portfolio-title" class="section-title">More Work</h2>
+    <h2 id="more-work-title" class="section-title">More Work</h2>
     <p class="section-lead">
       Directories, guided tools, and a character-led experiment — more of the same author, different jobs.
     </p>
     <div class="portfolio-mosaic">
       {moreWork.map((item) => (
-        <article class={`portfolio-entry layout-${item.layout}`}>
+        <article class={`portfolio-entry layout-${item.layout}`} data-reveal>
           <div class="portfolio-visual">
             <img src={item.image} alt={item.imageAlt} loading="lazy" decoding="async" width="640" height="400" />
           </div>
@@ -123,7 +130,7 @@ import {
     </div>
   </section>
 
-  <section class="section-block" id="what-i-build" aria-labelledby="build-title">
+  <section class="section-block" id="what-i-build" aria-labelledby="build-title" data-reveal>
     <p class="section-label">What I Build</p>
     <h2 id="build-title" class="section-title">Websites, apps, and tools with a clear job.</h2>
     <p class="section-lead">
@@ -131,7 +138,7 @@ import {
     </p>
     <div class="capability-list">
       {capabilities.map((item) => (
-        <article class="capability-row">
+        <article class="capability-row" data-reveal>
           <h3>{item.title}</h3>
           <p>{item.copy}</p>
         </article>
@@ -139,7 +146,7 @@ import {
     </div>
   </section>
 
-  <section class="section-block" id="about" aria-labelledby="about-title">
+  <section class="section-block" id="about" aria-labelledby="about-title" data-reveal>
     <p class="section-label">About</p>
     <div class="about-grid">
       <h2 id="about-title" class="section-title">You work with Jonathan.</h2>
@@ -159,7 +166,7 @@ import {
     <h2 id="process-title" class="section-title">Review. Conversation. Proposal. Build.</h2>
     <ol class="process-list">
       {processStages.map((stage) => (
-        <li class="process-step">
+        <li class="process-step" data-reveal>
           <span class="tech-label">{stage.number}</span>
           <strong>{stage.title}</strong>
           <p>{stage.copy}</p>
@@ -168,7 +175,7 @@ import {
     </ol>
   </section>
 
-  <section class="section-block" id="working-together" aria-labelledby="working-title">
+  <section class="section-block" id="working-together" aria-labelledby="working-title" data-reveal>
     <span id="launch-system"></span>
     <p class="section-label">Working Together</p>
     <h2 id="working-title" class="section-title">A clear starting point, then a written proposal.</h2>
@@ -343,3 +350,5 @@ import {
 <script src="../scripts/project-fit.ts"></script>
 <script src="../scripts/form.ts"></script>
 <script src="../scripts/motion-loop.ts"></script>
+<script src="../scripts/scroll-reveal.ts"></script>
+<script src="../scripts/analytics.ts"></script>

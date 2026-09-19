@@ -74,9 +74,12 @@ describe('HSD-001 brand and portfolio rebuild', () => {
     }
     expect(indexSource).toContain('featuredPortfolio.map');
     expect(indexSource).toContain('moreWork.map');
-    expect(siteSource).toContain('Independent project by Jonathan');
-    expect(siteSource).toContain("Jonathan's Art Project");
-    expect(siteSource).toContain('Android app by Jonathan Edward Lee');
+    expect(siteSource).toContain('Independent project');
+    expect(siteSource).toContain('My art project');
+    expect(siteSource).toContain('My Android app');
+    expect(siteSource).not.toContain('Independent project by Jonathan');
+    expect(siteSource).not.toContain("Jonathan's Art Project");
+    expect(siteSource).not.toContain('Android app by Jonathan Edward Lee');
     expect(siteSource).not.toContain('Owned PIM project');
     expect(siteSource).not.toContain('Jonathan / Junkfeathers property');
   });
@@ -87,7 +90,7 @@ describe('HSD-001 brand and portfolio rebuild', () => {
       expect(publicCopy).not.toContain(phrase);
     }
     expect(layoutSource).not.toMatch(/Project Launch System/);
-    expect(layoutSource).toContain('Websites, apps, and digital products by Jonathan Edward Lee');
+    expect(layoutSource).toContain('I design and build websites, apps, and digital products through Hoopsnake Designs');
   });
 
   it('keeps the hoopsnake loop motion with reduced-motion support', () => {
@@ -99,10 +102,10 @@ describe('HSD-001 brand and portfolio rebuild', () => {
     expect(globalCss).toContain('animation: loop-spin 56s linear infinite');
   });
 
-  it('names Jonathan as the human reviewer and keeps form success copy', () => {
-    expect(siteSource).toContain('Jonathan reads it and replies about next steps.');
-    expect(indexSource).toContain('If the project looks like a good fit, Jonathan will follow up to schedule a conversation.');
-    expect(formSource).toContain('If the project looks like a good fit, Jonathan will follow up to schedule a conversation.');
+  it('keeps first-person inquiry copy and a human reviewer', () => {
+    expect(siteSource).toContain('I read it and reply about next steps.');
+    expect(indexSource).toContain("If the project looks like a good fit, I'll follow up to schedule a conversation.");
+    expect(formSource).toContain("If the project looks like a good fit, I'll follow up to schedule a conversation.");
     expect(indexSource).not.toMatch(/Hoopsnake reviews/i);
     expect(indexSource).not.toMatch(/Hoopsnake evaluates/i);
     expect(layoutSource).toContain('Hoopsnake Designs');

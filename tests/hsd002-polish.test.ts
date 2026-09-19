@@ -37,8 +37,8 @@ describe('HSD-002 polish', () => {
   });
 
   it('warms conversion copy without repeating acceptance denials or AI-chat governance', () => {
-    expect(indexSource).toContain('Your proposal will clearly define scope, timeline, deliverables, and payment schedule before work begins.');
-    expect(indexSource).toContain('If the project looks like a good fit, Jonathan will follow up to schedule a conversation.');
+    expect(indexSource).toContain("I'll put scope, timeline, deliverables, and payment schedule in writing before work begins.");
+    expect(indexSource).toContain("If the project looks like a good fit, I'll follow up to schedule a conversation.");
     expect(publicCopy).not.toMatch(/acceptance is not (promised|assumed)/i);
     expect(indexSource).not.toContain('No public AI chat');
   });

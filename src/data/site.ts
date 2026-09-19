@@ -18,7 +18,7 @@ export const portfolioItems: PortfolioItem[] = [
   {
     id: 'orpheus-deck',
     title: 'Orpheus Deck',
-    relationship: 'Android app by Jonathan Edward Lee',
+    relationship: 'My Android app',
     description:
       'A public Android four-track recorder with a cassette-like interface, native audio, and a Google Play release.',
     href: 'https://play.google.com/store/apps/details?id=com.junkfeathers.orpheusdeck',
@@ -32,7 +32,7 @@ export const portfolioItems: PortfolioItem[] = [
   {
     id: 'ozarkskey',
     title: 'OzarksKey',
-    relationship: 'Independent project by Jonathan',
+    relationship: 'Independent project',
     description:
       'Regional discovery with map, search, and source routing so people can find trusted local event calendars.',
     href: 'https://ozarkskey.com/',
@@ -46,7 +46,7 @@ export const portfolioItems: PortfolioItem[] = [
   {
     id: 'junkfeathers',
     title: 'Junkfeathers',
-    relationship: "Jonathan's Art Project",
+    relationship: 'My art project',
     description:
       'Music and technology presentation with a restrained machine-interface, static architecture, and interactive experiments.',
     href: 'https://junkfeathers.com/',
@@ -60,7 +60,7 @@ export const portfolioItems: PortfolioItem[] = [
   {
     id: 'auto-detailing-guide',
     title: 'Auto Detailing Guide',
-    relationship: 'Independent project by Jonathan',
+    relationship: 'Independent project',
     description:
       'A directory people can actually search: find detailers by location, service, and business name.',
     href: 'https://autodetailingguide.com/',
@@ -74,7 +74,7 @@ export const portfolioItems: PortfolioItem[] = [
   {
     id: 'can-i-borrow-this',
     title: 'Can I Borrow This?',
-    relationship: 'Independent project by Jonathan',
+    relationship: 'Independent project',
     description:
       'Guided routing that helps people check libraries and borrowing programs instead of buying first.',
     href: 'https://caniborrowthis.com/',
@@ -88,7 +88,7 @@ export const portfolioItems: PortfolioItem[] = [
   {
     id: 'snorkleprawn',
     title: 'SnorklePrawn',
-    relationship: 'Independent project by Jonathan',
+    relationship: 'Independent project',
     description:
       'A character-led interactive page with lightweight state and a simple commerce handoff.',
     href: 'https://snorkleprawn.com/',
@@ -131,22 +131,22 @@ export const processStages = [
   {
     number: '01',
     title: 'Review',
-    copy: 'Send the project form when you are ready. Jonathan reads it and replies about next steps.',
+    copy: "Send the project form when you're ready. I read it and reply about next steps.",
   },
   {
     number: '02',
     title: 'Conversation',
-    copy: 'If the work looks like a good fit, a focused conversation clarifies goals, constraints, and who decides.',
+    copy: "If the project looks like a good fit, we'll have a focused conversation about goals, constraints, and who decides.",
   },
   {
     number: '03',
     title: 'Proposal',
-    copy: 'Scope, timeline, deliverables, and investment are written down before build begins.',
+    copy: "I'll put scope, timeline, deliverables, and investment in writing before I start building.",
   },
   {
     number: '04',
     title: 'Build + Launch',
-    copy: 'Implementation, review rounds, handoff, and launch. Larger apps and ongoing support stay on a separate scope.',
+    copy: 'I implement, review, hand off, and launch. Larger apps and ongoing support get a separate scope.',
   },
 ] as const;
 

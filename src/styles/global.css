@@ -85,6 +85,9 @@ a:hover { color: var(--hsd-accent-strong); }
   width: auto;
   max-width: min(20rem, 68vw);
 }
+@media (min-width: 960px) {
+  .brand-lockup-img { height: 3.55rem; }
+}
 .brand-mark, .footer-mark, .hero-mark, .hsd-mark { color: var(--hsd-fg); }
 .brand-mark { width: 2.4rem; height: 2.4rem; flex: none; }
 .site-nav { display: flex; flex-wrap: wrap; gap: 0.3rem 0.85rem; }
@@ -315,6 +318,21 @@ a:hover { color: var(--hsd-accent-strong); }
 @media (min-width: 860px) { .about-grid { grid-template-columns: minmax(0, 18ch) 1fr; align-items: start; } }
 .about-copy { display: grid; gap: 1rem; max-width: 62ch; }
 .about-copy p { margin: 0; font-size: 1.08rem; }
+.profile-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  margin: 0.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.profile-links a {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
 
 .process-list {
   list-style: none; margin: 2rem 0 0; padding: 0;

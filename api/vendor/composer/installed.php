@@ -3,7 +3,7 @@
         'name' => 'hoopsnake/designs-site-api',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '8638b898e1ac0650e4d829ac33c1ed3565b69163',
+        'reference' => '78c99e995d4ce87c8afddb0b979db003ab742937',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'hoopsnake/designs-site-api' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '8638b898e1ac0650e4d829ac33c1ed3565b69163',
+            'reference' => '78c99e995d4ce87c8afddb0b979db003ab742937',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

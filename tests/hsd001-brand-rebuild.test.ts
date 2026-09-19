@@ -56,7 +56,7 @@ describe('HSD-001 brand and portfolio rebuild', () => {
     expect(indexSource.indexOf('id="portfolio"')).toBeLessThan(indexSource.indexOf('id="working-together"'));
     expect(indexSource).toContain('id="portfolio-title"');
     expect(indexSource).toMatch(/<h2 id="portfolio-title"[^>]*>More Work<\/h2>/);
-    expect(layoutSource).toContain('href="#portfolio">Portfolio');
+    expect(layoutSource).toContain('href="#featured">Portfolio');
     expect(indexSource).toContain('$3,500');
     expect(indexSource.indexOf('$3,500')).toBeGreaterThan(indexSource.indexOf('id="working-together"'));
   });
@@ -75,7 +75,7 @@ describe('HSD-001 brand and portfolio rebuild', () => {
     expect(indexSource).toContain('featuredPortfolio.map');
     expect(indexSource).toContain('moreWork.map');
     expect(siteSource).toContain('Independent project by Jonathan');
-    expect(siteSource).toContain('Product designed and built by Jonathan');
+    expect(siteSource).toContain("Jonathan's Art Project");
     expect(siteSource).toContain('Android app by Jonathan Edward Lee');
     expect(siteSource).not.toContain('Owned PIM project');
     expect(siteSource).not.toContain('Jonathan / Junkfeathers property');

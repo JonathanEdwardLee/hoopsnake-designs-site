@@ -23,7 +23,7 @@ import {
         Custom work for businesses, creative projects, and people who want something better than a template. You work with Jonathan directly.
       </p>
       <div class="hero-actions">
-        <a class="button-primary" href="#portfolio">View Portfolio</a>
+        <a class="button-primary" href="#featured">View Portfolio</a>
         <a class="button-secondary" href="#project-review">Start a Project</a>
       </div>
     </div>
@@ -38,24 +38,53 @@ import {
 
   <section class="section-block featured-block" id="featured" aria-labelledby="featured-title">
     <p class="section-label">Featured</p>
-    <h2 id="featured-title" class="section-title">Recent work, shown at a scale you can actually judge.</h2>
-    <p class="section-lead">
-      These are real products and sites Jonathan designed and built — shown large enough to judge.
-    </p>
+    <h2 id="featured-title" class="visually-hidden">Featured work</h2>
 
     <div class="featured-stack">
       {featuredPortfolio.map((item, index) => (
         <article class={`feature-piece layout-${item.layout}`}>
           <div class="feature-visual">
-            <img
-              src={item.image}
-              alt={item.imageAlt}
-              width="1280"
-              height="720"
-              loading={index === 0 ? 'eager' : 'lazy'}
-              decoding="async"
-              fetchpriority={index === 0 ? 'high' : undefined}
-            />
+            {item.id === 'orpheus-deck' ? (
+              <div class="orpheus-proof">
+                <img
+                  class="orpheus-proof__main"
+                  src={item.image}
+                  alt={item.imageAlt}
+                  width="1080"
+                  height="1920"
+                  loading="eager"
+                  decoding="async"
+                  fetchpriority="high"
+                />
+                <div class="orpheus-proof__strip">
+                  <img
+                    src="/images/portfolio/orpheus-deck-recording.webp"
+                    alt="Orpheus Deck recording and overdub state"
+                    width="720"
+                    height="1280"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <img
+                    src="/images/portfolio/orpheus-deck-chronos.webp"
+                    alt="Orpheus Deck Chronos metronome overlay"
+                    width="720"
+                    height="1280"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+              </div>
+            ) : (
+              <img
+                src={item.image}
+                alt={item.imageAlt}
+                width="1280"
+                height="720"
+                loading={index === 0 ? 'eager' : 'lazy'}
+                decoding="async"
+              />
+            )}
           </div>
           <div class="feature-copy">
             <p class="relationship-tag">{item.relationship}</p>

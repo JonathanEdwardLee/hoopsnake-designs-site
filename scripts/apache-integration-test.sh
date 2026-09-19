@@ -122,6 +122,7 @@ status="$(request GET /)"
 assert_status "GET /" 200 "$status"
 assert_body_contains "GET /" "I design and build distinctive websites, apps, and digital tools."
 assert_body_contains "GET /" "More Work"
+assert_body_contains "GET /" "Jonathan&#39;s Art Project"
 assert_body_not_contains "GET /" "Owned PIM project"
 assert_body_not_contains "GET /" "No public AI chat"
 

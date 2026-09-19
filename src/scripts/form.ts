@@ -100,7 +100,7 @@ if (root) {
       if (result.ok && result.code === 'received') {
         form.hidden = true;
         if (success) success.hidden = false;
-        setStatus('Submission received. If the project looks like a good fit, Jonathan will follow up to schedule a conversation.', 'success');
+        setStatus("Submission received. If the project looks like a good fit, I'll follow up to schedule a conversation.", 'success');
         return;
       }
 

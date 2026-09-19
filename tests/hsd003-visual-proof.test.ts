@@ -40,7 +40,7 @@ describe('HSD-003 visual proof and approved logo', () => {
     expect(existsSync(resolve(root, 'public/images/portfolio/orpheus-deck.webp'))).toBe(false);
     expect(existsSync(resolve(root, 'public/images/portfolio/auto-detailing-guide.webp'))).toBe(true);
     expect(existsSync(resolve(root, 'public/images/portfolio/snorkleprawn.webp'))).toBe(true);
-    expect(siteSource).toContain("Jonathan's Art Project");
+    expect(siteSource).toContain('My art project');
     expect(indexSource).toContain('/images/portfolio/orpheus-play-main.webp');
     expect(indexSource).not.toContain('/images/portfolio/orpheus-deck.webp');
     expect(moreWork.map((item) => item.id)).toEqual([
